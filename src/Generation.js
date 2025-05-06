@@ -143,8 +143,6 @@ export const Generation = () => {
 
     return (
         <div className="generation-container">
-            <Navbar activePage="generation" />
-
             <div className="generation-content">
                 <div className="steps-container">
                     {/* 步骤指示器保持不变 */}

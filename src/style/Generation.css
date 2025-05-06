@@ -3,6 +3,9 @@
     margin: 0 auto; */
     /* padding: 20px; */
     font-family: 'Arial', sans-serif;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 160px 40px 80px;
 }
 
 .generation-header {
