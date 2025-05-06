@@ -9,13 +9,15 @@ export const Gallery = () => {
         { id: 1, name: "寂众", pinyin: "jì zhòng", tag: ["悲伤"], context: "王成之秋，七月既望，苏子与客泛舟游于赤壁之下。清风徐来，水波不兴。举酒属客，请明月之诗，歌窈窕之章。少焉，月出于东山之上，徘徊于斗牛之间。" },
         { id: 2, name: "空愉", pinyin: "kong yu", tag: ["快乐"], context: "无所事事的快乐。" },
         { id: 3, name: "替窘", pinyin: "ti jiong", tag: ["恐惧", "厌恶"], context: "当你在地铁中凝视陌生人时，突然惊觉对方也有完整的悲欢离合。这种'存在主义式的共情'，让日常的孤独感升华为对人类共同命运的悲悯。" },
-        { id: 4, name: "寂寂", pinyin: "jì jì", tag: ["悲伤"], context: "当你在地铁中凝视陌生人时，突然惊觉对方也有完整的悲欢离合。这种'存在主义式的共情'，让日常的孤独感升华为对人类共同命运的悲悯。" },
+        { id: 4, name: "一二三", pinyin: "jì jì", tag: ["悲伤"], context: "当你在地铁中凝视陌生人时，突然惊觉对方也有完整的悲欢离合。这种'存在主义式的共情'，让日常的孤独感升华为对人类共同命运的悲悯。" },
         { id: 5, name: "寂寂", pinyin: "jì jì", tag: ["悲伤"], context: "当你在地铁中凝视陌生人时，突然惊觉对方也有完整的悲欢离合。这种'存在主义式的共情'，让日常的孤独感升华为对人类共同命运的悲悯。" },
         { id: 6, name: "寂寂", pinyin: "jì jì", tag: ["悲伤"], context: "当你在地铁中凝视陌生人时，突然惊觉对方也有完整的悲欢离合。这种'存在主义式的共情'，让日常的孤独感升华为对人类共同命运的悲悯。" },
         { id: 7, name: "寂寂", pinyin: "jì jì", tag: ["悲伤"], context: "当你在地铁中凝视陌生人时，突然惊觉对方也有完整的悲欢离合。这种'存在主义式的共情'，让日常的孤独感升华为对人类共同命运的悲悯。" },
         { id: 8, name: "寂寂", pinyin: "jì jì", tag: ["悲伤"], context: "当你在地铁中凝视陌生人时，突然惊觉对方也有完整的悲欢离合。这种'存在主义式的共情'，让日常的孤独感升华为对人类共同命运的悲悯。" },
         { id: 9, name: "寂众", pinyin: "jì zhòng", tag: ["悲伤"], context: "当你在地铁中凝视陌生人时，突然惊觉对方也有完整的悲欢离合。这种'存在主义式的共情'，让日常的孤独感升华为对人类共同命运的悲悯。" },
         { id: 10, name: "寂寂", pinyin: "jì jì", tag: ["悲伤"], context: "当你在地铁中凝视陌生人时，突然惊觉对方也有完整的悲欢离合。这种'存在主义式的共情'，让日常的孤独感升华为对人类共同命运的悲悯。" },
+        { id: 11, name: "孤寂", pinyin: "gū jì", tag: ["悲伤"], context: "内心深处的孤独感。" },
+        { id: 12, name: "静怡", pinyin: "jìng yí", tag: ["平静"], context: "安静而愉悦的心情。" },
     ];
     
     const [selectedCard, setSelectedCard] = useState(null);
@@ -60,44 +62,103 @@ export const Gallery = () => {
                 </div>
             </div>
             
-            <div className="cards-container">
-                <div className="cards">
-                    {emotions.map((emotion) => (
+            <div className="characters-grid" style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(6, 120px)',
+                justifyContent: 'center',
+                gap: '60px 60px',
+                margin: '60px auto',
+                padding: '0 20px'
+            }}>
+                {emotions.map((emotion, index) => {
+                    const charCount = emotion.name.length;
+                    const containerHeight = charCount * 120;
+                    
+                    return (
                         <div 
                             key={emotion.id} 
-                            className="card-wrapper"
+                            className="word-container"
+                            onClick={(e) => handleCardClick(emotion.id, e)}
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                cursor: 'pointer',
+                                border: '1px solid #e53935',
+                                width: '120px',
+                                height: `${containerHeight}px`,
+                                boxSizing: 'border-box'
+                            }}
                         >
-                            <div className="card-inner" onClick={(e) => handleCardClick(emotion.id, e)}>
-                                <div className="card-front">
-                                    <div className="card-color">
-                                        <div className="card-color-inner">
-                                            <div className="pinyin">{emotion.pinyin}</div>
-                                            <div className="name">{emotion.name}</div>
+                            {[...emotion.name].map((char, charIndex) => (
+                                <React.Fragment key={charIndex}>
+                                    <div style={{
+                                        width: '100%',
+                                        height: '120px',
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        position: 'relative',
+                                        fontSize: '36px',
+                                        fontWeight: 'bold',
+                                        borderBottom: charIndex < charCount - 1 ? '1px solid #e53935' : 'none',
+                                        overflow: 'hidden'
+                                    }}>
+                                        <div style={{ zIndex: 2 }}>{char}</div>
+                                        <div style={{
+                                            position: 'absolute',
+                                            top: 0,
+                                            left: 0,
+                                            width: '100%',
+                                            height: '100%',
+                                            zIndex: 1
+                                        }}>
+                                            <div style={{
+                                                position: 'absolute',
+                                                top: '50%',
+                                                left: 0,
+                                                width: '100%',
+                                                height: '1px',
+                                                borderBottom: '1px dashed #e53935',
+                                                opacity: 0.5
+                                            }}></div>
+                                            <div style={{
+                                                position: 'absolute',
+                                                left: '50%',
+                                                top: 0,
+                                                height: '100%',
+                                                width: '1px',
+                                                borderRight: '1px dashed #e53935',
+                                                opacity: 0.5
+                                            }}></div>
+                                            <div style={{
+                                                position: 'absolute',
+                                                width: '141%',
+                                                height: '1px',
+                                                top: '50%',
+                                                left: '-20%',
+                                                transform: 'rotate(45deg)',
+                                                transformOrigin: 'center',
+                                                borderBottom: '1px dashed #e53935',
+                                                opacity: 0.5
+                                            }}></div>
+                                            <div style={{
+                                                position: 'absolute',
+                                                width: '141%',
+                                                height: '1px',
+                                                top: '50%',
+                                                left: '-20%',
+                                                transform: 'rotate(-45deg)',
+                                                transformOrigin: 'center',
+                                                borderBottom: '1px dashed #e53935',
+                                                opacity: 0.5
+                                            }}></div>
                                         </div>
                                     </div>
-                                    <div className="tag">{emotion.tag.join(', ')}</div>
-                                    <div className="heart-icon">
-                                        <FontAwesomeIcon icon={faHeart} style={{color: "#000000"}}/>
-                                    </div>
-                                </div>
-                                <div className="card-back">
-                                    <div className="card-back-inner">
-                                        <div className="card-back-header">
-                                            <div className="pinyin">{emotion.pinyin}</div>
-                                            <div className="name">{emotion.name}</div>
-                                        </div>
-                                        <div className="context">
-                                            {emotion.context}
-                                        </div>
-                                    </div>
-                                    <div className="heart-icon">
-                                        <FontAwesomeIcon icon={faHeart} style={{color: "#000000"}}/>
-                                    </div>
-                                </div>
-                            </div>
+                                </React.Fragment>
+                            ))}
                         </div>
-                    ))}
-                </div>
+                    );
+                })}
             </div>
             
             <AnimatePresence>
