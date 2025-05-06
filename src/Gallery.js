@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import './style/Gallery.css';
+import { Navbar } from './NavBar';
 
 export const Gallery = () => {
     const emotions = [
@@ -45,16 +46,7 @@ export const Gallery = () => {
     
     return (
         <>
-            {/* 添加导航栏 */}
-            <header className="generation-header">
-                <div className="title">
-                    <h1>未命名情感计划 <span className="subtitle">Uncharted Emotional Territories</span></h1>
-                </div>
-                <div className="nav-links">
-                    <a onClick={() => window.location.href = '/gallery'} className="nav-link" style={{cursor: 'pointer'}}>浏览</a>
-                    <a onClick={() => window.location.href = '/generation'} className="nav-link" style={{cursor: 'pointer'}}>生成新词</a>
-                </div>
-            </header>
+            <Navbar activePage="gallery" />
             
             <div className="cards-container">
                 <div className="cards">
