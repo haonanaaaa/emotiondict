@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { OpenAI } from 'openai';
+import { BrowserRouter as Router, Routes, Route, Link, useNavigate }  from 'react-router-dom'
 import './style/Generation.css';
 
 export const Generation = () => {
@@ -146,8 +147,8 @@ export const Generation = () => {
                     <h1>未命名情感计划 <span className="subtitle">Uncharted Emotional Territories</span></h1>
                 </div>
                 <div className="nav-links">
-                    <a href="#" className="nav-link">浏览</a>
-                    <a href="#" className="nav-link">生成新词</a>
+                    <Link to="/gallery" className="nav-link">浏览</Link>
+                    <Link to="/generation" className="nav-link">生成新词</Link>
                 </div>
             </header>
 

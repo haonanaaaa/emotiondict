@@ -44,43 +44,57 @@ export const Gallery = () => {
     };
     
     return (
-        <div className="cards-container">
-            <div className="cards">
-                {emotions.map((emotion) => (
-                    <div 
-                        key={emotion.id} 
-                        className="card-wrapper"
-                    >
-                        <div className="card-inner" onClick={(e) => handleCardClick(emotion.id, e)}>
-                            <div className="card-front">
-                                <div className="card-color">
-                                    <div className="card-color-inner">
-                                        <div className="pinyin">{emotion.pinyin}</div>
-                                        <div className="name">{emotion.name}</div>
+        <>
+            {/* 添加导航栏 */}
+            <header className="generation-header">
+                <div className="title">
+                    <h1>未命名情感计划 <span className="subtitle">Uncharted Emotional Territories</span></h1>
+                </div>
+                <div className="nav-links">
+                    <a onClick={() => window.location.href = '/gallery'} className="nav-link" style={{cursor: 'pointer'}}>浏览</a>
+                    <a onClick={() => window.location.href = '/generation'} className="nav-link" style={{cursor: 'pointer'}}>生成新词</a>
+                </div>
+            </header>
+            
+            <div className="cards-container">
+                <div className="cards">
+                    {emotions.map((emotion) => (
+                        <div 
+                            key={emotion.id} 
+                            className="card-wrapper"
+                        >
+                            {/* 卡片内容保持不变 */}
+                            <div className="card-inner" onClick={(e) => handleCardClick(emotion.id, e)}>
+                                <div className="card-front">
+                                    <div className="card-color">
+                                        <div className="card-color-inner">
+                                            <div className="pinyin">{emotion.pinyin}</div>
+                                            <div className="name">{emotion.name}</div>
+                                        </div>
+                                    </div>
+                                    <div className="tag">{emotion.tag.join(', ')}</div>
+                                    <div className="heart-icon">
+                                        <FontAwesomeIcon icon={faHeart} style={{color: "#000000",}}/>
                                     </div>
                                 </div>
-                                <div className="tag">{emotion.tag.join(', ')}</div>
-                                <div className="heart-icon">
-                                    <FontAwesomeIcon icon={faHeart} style={{color: "#000000",}}/>
-                                </div>
-                            </div>
-                            <div className="card-back">
-                                <div className="card-back-inner">
-                                    <div className="card-back-header">
-                                        <div className="pinyin">{emotion.pinyin}</div>
-                                        <div className="name">{emotion.name}</div>
+                                <div className="card-back">
+                                    <div className="card-back-inner">
+                                        <div className="card-back-header">
+                                            <div className="pinyin">{emotion.pinyin}</div>
+                                            <div className="name">{emotion.name}</div>
+                                        </div>
+                                        <div className="context">
+                                            {emotion.context}
+                                        </div>
                                     </div>
-                                    <div className="context">
-                                        {emotion.context}
+                                    <div className="heart-icon">
+                                        <FontAwesomeIcon icon={faHeart} style={{color: "#000000",}}/>
                                     </div>
-                                </div>
-                                <div className="heart-icon">
-                                    <FontAwesomeIcon icon={faHeart} style={{color: "#000000",}}/>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
             </div>
             
             <AnimatePresence>
@@ -163,7 +177,7 @@ export const Gallery = () => {
                     </motion.div>
                 )}
             </AnimatePresence>
-        </div>
+        </>
     );
 };
 

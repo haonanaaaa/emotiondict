@@ -1,7 +1,7 @@
 .generation-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
+    /* max-width: 1200px;
+    margin: 0 auto; */
+    /* padding: 20px; */
     font-family: 'Arial', sans-serif;
 }
 
@@ -54,6 +54,7 @@
 .generation-content {
     display: flex;
     gap: 30px;
+    padding: 20px 40px;
 }
 
 .steps-container {
