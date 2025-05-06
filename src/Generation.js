@@ -142,16 +142,6 @@ export const Generation = () => {
 
     return (
         <div className="generation-container">
-            <header className="generation-header">
-                <div className="title">
-                    <h1>未命名情感计划 <span className="subtitle">Uncharted Emotional Territories</span></h1>
-                </div>
-                <div className="nav-links">
-                    <Link to="/gallery" className="nav-link">浏览</Link>
-                    <Link to="/generation" className="nav-link">生成新词</Link>
-                </div>
-            </header>
-
             <div className="generation-content">
                 <div className="steps-container">
                     {/* 步骤指示器保持不变 */}
