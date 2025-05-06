@@ -3,6 +3,9 @@
     margin: 0 auto; */
     /* padding: 20px; */
     font-family: 'Arial', sans-serif;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 160px 40px 80px;
 }
 
 .generation-header {
@@ -54,7 +57,7 @@
 .generation-content {
     display: flex;
     gap: 30px;
-    padding: 20px 40px;
+    padding: 0;
 }
 
 .steps-container {
