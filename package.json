@@ -16,6 +16,7 @@
     "framer-motion": "^12.7.4",
     "node-fetch": "^2.7.0",
     "openai": "^4.97.0",
+    "pinyin-pro": "^3.26.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.5.3",

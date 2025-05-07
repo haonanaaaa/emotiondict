@@ -17,4 +17,5 @@
 按照以下格式输出,除要求输出的内容以外不要输出其他内容:
 情绪倾向: {情绪倾向result}，{情绪强度result}，{情绪复杂度result}\n
 现有词汇和诗句: {resuesult}\n
+生成词汇：{result}\n
 解释：{result}
