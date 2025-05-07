@@ -35,8 +35,7 @@
 
 .quote-content {
   border: 1px solid var(--primary-color);
-  padding: 30px;
-  border-radius: var(--border-radius);
+  padding: var(--spacing-md) var(--spacing-lg);
   background-color: var(--secondary-color);
   font-family: 'Kai';
 }
@@ -49,6 +48,7 @@
 
 .quote-author {
   text-align: right;
+  font-style: italic;
 }
 
 /* 词语网格布局 */
@@ -78,6 +78,18 @@
   transition: background-color 0.3s ease;
 }
 
+.word-container:hover .character-text {
+  color: var(--text-color) !important;
+  transform: none !important;
+  filter: none !important;
+}
+
+.word-container:active .character-text {
+  color: var(--text-color) !important;
+  transform: none !important;
+  filter: none !important;
+}
+
 .character-cell {
   width: 100%;
   height: 120px;
@@ -89,7 +101,8 @@
   font-family: songti;
   font-size: var(--font-xl);
   font-weight: bold;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid;
+  border-color: inherit;
   overflow: hidden;
 }
 

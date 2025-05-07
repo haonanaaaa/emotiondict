@@ -76,6 +76,10 @@ code {
   font-family: 'Code Font', monospace;
 }
 
+.english {
+  font-family: 'Cormorant Garamond';
+}
+
 /* 按钮样式 */
 .btn-primary {
   text-decoration: none;

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import './Wordcloud.css';
 
-const Wordcloud = ({ words }) => {
+const Wordcloud = ({ words, potency }) => {
   const cloudRef = useRef(null);
 
   useEffect(() => {
@@ -28,9 +28,9 @@ const Wordcloud = ({ words }) => {
       wordElement.style.fontSize = `${fontSize}em`;
       wordElement.style.opacity = opacity;
       
-      // 应用颜色类
-      const colorClass = `color`;
-      wordElement.classList.add(colorClass);
+      // 应用颜色类和potency属性
+      wordElement.classList.add('color');
+      wordElement.setAttribute('data-potency', potency);
 
       // 添加到文档片段
       fragment.appendChild(wordElement);
@@ -38,7 +38,7 @@ const Wordcloud = ({ words }) => {
 
     // 将文档片段一次性添加到DOM
     cloudRef.current.appendChild(fragment);
-  }, [words]);
+  }, [words, potency]);
 
   return (
     <div className="wordcloud-container" ref={cloudRef}></div>
