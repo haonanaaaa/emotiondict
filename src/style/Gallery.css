@@ -53,6 +53,7 @@
 
 /* 词语网格布局 */
 .characters-grid {
+
   display: grid;
   grid-template-columns: repeat(6, 120px);
   justify-content: center;
@@ -84,7 +85,9 @@
   justify-content: center;
   align-items: center;
   position: relative;
-  font-size: var(--font-lg);
+  color: var(--text-color);
+  font-family: songti;
+  font-size: var(--font-xl);
   font-weight: bold;
   border-bottom: 1px solid var(--border-color);
   overflow: hidden;
@@ -96,8 +99,7 @@
 
 .character-text {
   z-index: 2;
-  font-family: 'Noto Serif SC', serif;
-  font-weight: 700;
+  /* filter: blur(2px); */
 }
 
 .character-background {
@@ -169,6 +171,7 @@
   max-height: 90vh;
   position: relative;
   overflow: hidden;
+  border: 2px solid var(--primary-color);
 }
 
 .popup-close-button {
@@ -202,7 +205,6 @@
 
 .popup-right {
   flex: 1;
-  background-color: var(--accent-color);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -216,6 +218,7 @@
 }
 
 .emotion-name {
+  font-family: 'songti';
   font-size: var(--font-xl);
   font-weight: 700;
   margin-bottom: var(--spacing-md);

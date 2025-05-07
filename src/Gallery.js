@@ -4,10 +4,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import './style/Gallery.css';
+import Wordcloud from './components/Wordcloud';
 
 export const Gallery = () => {
     const emotions = [
-        { id: 1, name: "寂众", pinyin: "jì zhòng", tag: ["悲伤"], context: "王成之秋，七月既望，苏子与客泛舟游于赤壁之下。清风徐来，水波不兴。举酒属客，请明月之诗，歌窈窕之章。少焉，月出于东山之上，徘徊于斗牛之间。王成之秋，七月既望，苏子与客泛舟游于赤壁之下。清风徐来，水波不兴。举酒属客，请明月之诗，歌窈窕之章。少焉，月出于东山之上，徘徊于斗牛之间。" },
+        { id: 1, name: "寂众", pinyin: "jì zhòng", tag: ["悲伤"], wordcloud: ["情绪雪崩​", "​泪崩", "心神不定", "潸然泪下", "能量透支性哭泣", "​崩溃", "精神恍惚​", "失魂落魄", "悲从中来​", "​泪崩1", "心神不定1", "潸然泪下1", "能量透支性哭泣1", "​崩溃1", "精神恍惚1​", "失魂落魄1", "悲从中来1​"], context: "王成之秋，七月既望，苏子与客泛舟游于赤壁之下。清风徐来，水波不兴。举酒属客，请明月之诗，歌窈窕之章。少焉，月出于东山之上，徘徊于斗牛之间。王成之秋，七月既望，苏子与客泛舟游于赤壁之下。清风徐来，水波不兴。举酒属客，请明月之诗，歌窈窕之章。少焉，月出于东山之上，徘徊于斗牛之间。" },
         { id: 2, name: "空愉", pinyin: "kong yu", tag: ["快乐"], context: "无所事事的快乐。" },
         { id: 3, name: "替窘", pinyin: "ti jiong", tag: ["恐惧", "厌恶"], context: "当你在地铁中凝视陌生人时，突然惊觉对方也有完整的悲欢离合。这种'存在主义式的共情'，让日常的孤独感升华为对人类共同命运的悲悯。" },
         { id: 4, name: "一二三", pinyin: "jì jì", tag: ["悲伤"], context: "当你在地铁中凝视陌生人时，突然惊觉对方也有完整的悲欢离合。这种'存在主义式的共情'，让日常的孤独感升华为对人类共同命运的悲悯。" },
@@ -132,7 +133,7 @@ export const Gallery = () => {
                                 </div>
                                 
                                 <div className="popup-right">
-                                    {/* 暂时用空div填充蓝色代替词云 */}
+                                    <Wordcloud words={selectedEmotion.wordcloud} />
                                 </div>
                             </div>
                         </motion.div>
