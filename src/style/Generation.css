@@ -22,11 +22,13 @@
 .step {
     margin-bottom: var(--spacing-lg);
     opacity: 0.5;
-    transition: opacity 0.3s;
+    transition: opacity 0.3s, color 0.3s;
+    color: #999; /* 默认灰色文字 */
 }
 
 .step.active {
     opacity: 1;
+    color: #000; /* 激活状态黑色文字 */
 }
 
 .step-number {
@@ -37,6 +39,39 @@
 }
 
 .step-title {
+    margin-bottom: 15px;
+    position: relative;
+    display: inline-block;
+    color: inherit; /* 继承父元素颜色 */
+}
+
+.step-title {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: inherit; /* 继承父元素颜色 */
+}
+
+.step-number::before {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background-color: #ff0000;
+    border-radius: 50%;
+    bottom: -20px;
+    left: 91%;
+    top: 10%;
+    transform: translateX(-50%);
+    /* transition: opacity 0.3s; */
+    opacity: 0.5;
+}
+
+.step.active .step-number::after {
+    opacity: 1;
+}
+
+.step-title {
+    font-size: 20px;
     margin-bottom: 10px;
 }
 
@@ -52,7 +87,8 @@
 }
 
 .input-container {
-    width: 70%;
+    width: 77%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     flex: 1;
@@ -66,6 +102,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
+    height: 500px; /* 设置一个固定高度，比如400px */
 }
 
 .emotion-input {
@@ -74,11 +111,27 @@
     font-family: 'songti';
     width: 100%;
     flex: 1;
-    min-height: 300px;
+    height: 90%;
     border: none;
     resize: none;
-    line-height: 1.6;
+    font-size: 16px;
+    line-height: 2.5; /* 增加行高，为横线留出空间 */
     outline: none;
+    background-image: linear-gradient(transparent calc(100% - 1px), #E84E50 calc(100% - 0.5px));
+    background-size: 100% 2.5em; /* 与行高匹配 */
+    background-origin: content-box;
+    padding: 0;
+    text-indent: 0;
+}
+
+/* 可以移除或修改input-box的边框样式，让它更符合横线本的外观 */
+.input-box {
+    border: 2px solid #E84E50; /* 更改为更轻的边框 */
+    padding: 20px;
+    margin-bottom: 20px;
+    position: relative;
+    height: 500px;
+    background-color: #fff; /* 确保背景是白色 */
 }
 
 .character-count {
@@ -96,34 +149,164 @@
 
 .result-container {
     margin-top: 20px;
-    padding: 20px;
-    border: 1px solid #e0e0e0;
-    border-radius: 10px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    /* border: 1px solid #e0e0e0; */
+    /* border-radius: 10px; */
 }
 
 /* 在现有CSS的基础上添加以下样式 */
 
+/* 米字格样式 */
 .api-responses {
     display: flex;
-    flex-direction: column;
-    gap: 20px;
+    justify-content: space-around;
+    gap: 10px;
     margin-bottom: 20px;
+    margin-top:20px
 }
 
+/* 添加API响应的悬停效果 */
 .api-response {
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 15px;
-    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+/* 当鼠标悬停在api-response上时，改变字体和边框颜色 */
+.api-response:hover .character-grid {
+    border-color: #E84E50;
+}
+
+.api-response:hover .character-grid::before,
+.api-response:hover .character-grid::after,
+.api-response:hover .diagonal-1,
+.api-response:hover .diagonal-2 {
+    border-color: #E84E50;
+}
+
+/* 当鼠标悬停在api-response上时，改变圆圈颜色 */
+.api-response:hover .circle-selector {
+    color: #E84E50;
+}
+
+/* 圆圈选择器样式 */
+.circle-selector {
+    margin-top: 15px;
+    font-size: 24px;
+    color: #666;
+    text-align: center;
+    transition: color 0.3s ease;
 }
 
 .api-response h4 {
     margin-top: 0;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     color: #333;
     font-size: 16px;
 }
 
+.response-content {
+    display: flex;
+    justify-content: center;
+    /* 移除gap */
+}
+
+/* 添加拼音样式 */
+.pinyin {
+    position: absolute;
+    top: -25px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+    font-weight: normal;
+}
+
+/* 调整米字格样式，为拼音留出空间 */
+.character-grid {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 42px;
+    font-weight: bold;
+    color: #333;
+    border: 1.5px solid #666;
+    box-sizing: border-box;
+    margin-right: -1.5px; /* 负margin抵消重叠的边框 */
+    background-color: white; /* 确保背景是白色 */
+    margin-top: 25px; /* 为拼音留出空间 */
+}
+
+/* 确保字符在虚线上方 */
+.character-grid span {
+    position: relative;
+    z-index: 2; /* 设置较高的z-index，确保文字在线条上方 */
+}
+
+/* 最后一个字不需要负margin */
+.character-grid:last-child {
+    margin-right: 0;
+}
+
+/* 横线 - 虚线 */
+.character-grid::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 0;
+    border-top: 1px dashed #999;
+    transform: translateY(-50%);
+    z-index: 1; /* 设置较低的z-index */
+}
+
+/* 竖线 - 虚线 */
+.character-grid::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 0;
+    height: 100%;
+    border-left: 1px dashed #999;
+    transform: translateX(-50%);
+    z-index: 1; /* 设置较低的z-index */
+}
+
+/* 对角线1 - 虚线 (左上到右下) */
+.diagonal-1 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 141.4%; /* 对角线长度 = 正方形边长 * √2 */
+    height: 0;
+    border-top: 1px dashed #999;
+    transform: rotate(45deg);
+    transform-origin: 0 0;
+    z-index: 1; /* 设置较低的z-index */
+}
+
+/* 对角线2 - 虚线 (右上到左下) */
+.diagonal-2 {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 141.4%; /* 对角线长度 = 正方形边长 * √2 */
+    height: 0;
+    border-top: 1px dashed #999;
+    transform: rotate(-45deg);
+    transform-origin: 100% 0;
+    z-index: 1; /* 设置较低的z-index */
+}
 .response-content {
     white-space: pre-wrap;
     font-size: 14px;
@@ -181,20 +364,32 @@
         padding: 20px;
     }
     
-    .step-number {
-        font-size: 14px;
+        .step-number {
+            font-size: 14px;
+        }
+        
+        .step-title {
+            font-size: 16px;
+        }
+        
+        .emotion-input {
+            font-size: var(--font-md);
+            min-height: 200px;
+        }
+        
+        .api-response {
+            padding: 10px;
+        }
+    /* 添加圆圈选择器样式 */
+    .circle-selector {
+        /* margin-top: 15px; */
+        font-size: 48px;
+        color: black;
+        cursor: pointer;
+        text-align: center;
     }
-    
-    .step-title {
-        font-size: 16px;
-    }
-    
-    .emotion-input {
-        font-size: var(--font-md);
-        min-height: 200px;
-    }
-    
-    .api-response {
-        padding: 10px;
+
+    .circle-selector:hover {
+        color: #E84E50;
     }
 }
