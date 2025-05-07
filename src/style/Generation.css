@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap');
 .generation-container {
     /* max-width: 1200px;
     margin: 0 auto; */
@@ -47,20 +48,25 @@
     color: var(--text-light);
 }
 
+@font-face {
+    font-family: 'Noto Serif SC';
+    src: url('../assets/font/NotoSerif-VariableFont_wdth\,wght.ttf')
+}
 .step-title {
     margin-bottom: 15px;
     position: relative;
     display: inline-block;
     color: inherit; /* 继承父元素颜色 */
-    font-family: 'Kai';
+    font-family: 'Noto Serif SC'; /* 确保使用noto-serif-sc字体 */
 }
 
-.step-title {
+/* 删除或合并这个重复的选择器 */
+/* .step-title {
     font-size: 20px;
     margin-bottom: 10px;
-    color: inherit; /* 继承父元素颜色 */
+    color: inherit; 
     font-family: 'noto-serif-sc';
-}
+} */
 
 .step-number::before {
     content: '';
@@ -84,7 +90,7 @@
 .step-title {
     font-size: 20px;
     margin-bottom: 10px;
-    font-family: 'noto-serif-sc';
+    
 }
 
 .step-hints {

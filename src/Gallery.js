@@ -126,7 +126,7 @@ export const Gallery = () => {
                             onClick={() => handleCardClick(emotion.id)}
                             style={{ 
                                 height: `${charCount * 120}px`,
-                                borderColor: emotion.potency === 1 ? 'var(--primary-color)' : '#0000ff'
+                                borderColor: emotion.potency > 3 ? 'var(--primary-color)' : '#0000ff'
                             }}
                         >
                             {[...emotion.name].map((char, charIndex) => (
@@ -143,19 +143,19 @@ export const Gallery = () => {
                                     <div className="character-background">
                                         <div 
                                             className="background-line horizontal-line"
-                                            style={{ borderColor: emotion.potency === 1 ? 'var(--primary-color)' : '#0000ff' }}
+                                            style={{ borderColor: emotion.potency > 3 ? 'var(--primary-color)' : '#0000ff' }}
                                         ></div>
                                         <div 
                                             className="background-line vertical-line"
-                                            style={{ borderColor: emotion.potency === 1 ? 'var(--primary-color)' : '#0000ff' }}
+                                            style={{ borderColor: emotion.potency > 3 ? 'var(--primary-color)' : '#0000ff' }}
                                         ></div>
                                         <div 
                                             className="background-line diagonal-line diagonal-line-1"
-                                            style={{ borderColor: emotion.potency === 1 ? 'var(--primary-color)' : '#0000ff' }}
+                                            style={{ borderColor: emotion.potency > 3 ? 'var(--primary-color)' : '#0000ff' }}
                                         ></div>
                                         <div 
                                             className="background-line diagonal-line diagonal-line-2"
-                                            style={{ borderColor: emotion.potency === 1 ? 'var(--primary-color)' : '#0000ff' }}
+                                            style={{ borderColor: emotion.potency > 3 ? 'var(--primary-color)' : '#0000ff' }}
                                         ></div>
                                     </div>
                                 </div>
@@ -181,7 +181,7 @@ export const Gallery = () => {
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.9, opacity: 0 }}
                             transition={{ duration: 0.3 }}
-                            style={{ borderColor: selectedEmotion.potency === 1 ? 'var(--primary-color)' : '#0000ff' }}
+                            style={{ borderColor: selectedEmotion.potency > 3 ? 'var(--primary-color)' : '#0000ff' }}
                         >
                             <div className="popup-close-button" onClick={closePopup}>
                                 <FontAwesomeIcon icon={faTimes} />
@@ -201,19 +201,19 @@ export const Gallery = () => {
                                         <div className="emotion-analysis">
                                             <div className="analysis-item">
                                                 <span className="analysis-label">粒度 Granularity</span>
-                                                <span className="analysis-value">0~20</span>
+                                                <span className="analysis-value">{selectedEmotion.granularity}</span>
                                             </div>
                                             <div className="analysis-item">
                                                 <span className="analysis-label">效价 Potency</span>
-                                                <span className="analysis-value">消极</span>
+                                                <span className="analysis-value">{selectedEmotion.potency>3?'积极':'消极'}</span>
                                             </div>
                                             <div className="analysis-item">
                                                 <span className="analysis-label">强度 Intensity</span>
-                                                <span className="analysis-value">50</span>
+                                                <span className="analysis-value">{selectedEmotion.intensity}</span>
                                             </div>
                                             <div className="analysis-item">
                                                 <span className="analysis-label">复杂度 Complexity</span>
-                                                <span className="analysis-value">高</span>
+                                                <span className="analysis-value">{selectedEmotion.complexity}</span>
                                             </div>
                                         </div>
                                         

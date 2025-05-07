@@ -36,10 +36,22 @@ color: #323232;
 
 /* 悬停背景效果 */
 /* 替代方案：直接使用背景色 */
-.wordcloud-word.color[data-potency="2"]:hover {
+.wordcloud-word.color[data-potency="4"]:hover {
   background-color: rgba(229, 77, 46, 0.2);
 }
 
-.wordcloud-word.color[data-potency="0"]:hover {
+.wordcloud-word.color[data-potency="5"]:hover {
+  background-color: rgba(229, 77, 46, 0.2);
+}
+
+.wordcloud-word.color[data-potency="1"]:hover {
+  background-color: rgba(0, 0, 255, 0.2);
+}
+
+.wordcloud-word.color[data-potency="2"]:hover {
+  background-color: rgba(0, 0, 255, 0.2);
+}
+
+.wordcloud-word.color[data-potency="3"]:hover {
   background-color: rgba(0, 0, 255, 0.2);
 }
