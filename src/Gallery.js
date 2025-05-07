@@ -64,9 +64,9 @@ export const Gallery = () => {
         // 将granularity从0-5映射到0-1em
         return `blur(${(5 - granularity)}px)`;
     };
-    
+
     return (
-        <>
+        <div className="gallery-container">
             <div className="intro-section">
                 <div className="intro-text">
                     <p>如果把人类的情感世界比喻成一幅画，这幅画本身包含的内容和色彩可能有几百个图层这么丰富，但每个人能感受到的层次是不一样的。提高情绪的感知能力能够帮助我们逐步展开面布的图层。</p>
@@ -201,7 +201,7 @@ export const Gallery = () => {
             <footer className="footer-section">
                 <p>2025 Unnamed Emotion Dictionary.</p>
             </footer>
-        </>
+        </div>
     );
 };
 

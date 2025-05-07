@@ -37,8 +37,8 @@
   --primary-color: #E54D2E;
   --secondary-color: #fff;
   --text-color: #323232;
-  --text-light: #666;
-  --text-lighter: #555;
+  --text-light: #676767;
+  --text-lighter: #ababab;
   --border-color: #e53935;
   --background-light: #f9f9f9;
   --background-overlay: rgba(0, 0, 0, 0.7);
@@ -70,6 +70,7 @@ body {
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-image: url('../assets/svg/background.svg');
 }
 
 code {
@@ -96,3 +97,9 @@ code {
 .btn-primary:hover {
   background-color: var(--text-color);
 } 
+
+.btn-primary:disabled {
+    background-color: var(--text-light);
+    cursor: not-allowed;
+}
+

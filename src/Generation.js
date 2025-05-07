@@ -1,7 +1,4 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { OpenAI } from 'openai';
-import { BrowserRouter as Router, Routes, Route, Link, useNavigate }  from 'react-router-dom'
 import './style/Generation.css';
 
 export const Generation = () => {
@@ -146,8 +143,8 @@ export const Generation = () => {
                 <div className="steps-container">
                     {/* 步骤指示器保持不变 */}
                     <div className={`step ${currentStep >= 1 ? 'active' : ''}`}>
-                        <div className="step-number">STEP 1</div>
-                        <div className="step-title">请详尽地描述您的情绪或感受</div>
+                        <div className="step-number english">Step 1</div>
+                        <div className="step-title">请详尽地描述你的情绪或感受</div>
                         <div className="step-hints">
                             <p>可参考以下事项：</p>
                             <p>· · · · · · · ·</p>
@@ -159,33 +156,33 @@ export const Generation = () => {
                     </div>
 
                     <div className={`step ${currentStep >= 2 ? 'active' : ''}`}>
-                        <div className="step-number">STEP 2</div>
-                        <div className="step-title">请等待AI为您生成新的情绪词汇</div>
+                        <div className="step-number english">Step 2</div>
+                        <div className="step-title">等待AI为你生成新的情绪词汇</div>
                     </div>
 
                     <div className={`step ${currentStep >= 3 ? 'active' : ''}`}>
-                        <div className="step-number">STEP 3</div>
-                        <div className="step-title">请选择最满意的情绪词汇</div>
+                        <div className="step-number english">Step 3</div>
+                        <div className="step-title">选择最满意的情绪词汇</div>
                         <div className="step-hints">
                             <p>· 情绪词汇选择区</p>
-                            <p>· 您可以选择喜欢</p>
-                            <p>· 您可以选择您喜欢的</p>
+                            <p>· 你可以选择喜欢</p>
+                            <p>· 你可以选择你喜欢的</p>
                         </div>
                     </div>
 
                     <div className={`step ${currentStep >= 4 ? 'active' : ''}`}>
-                        <div className="step-number">STEP 4</div>
-                        <div className="step-title">请留名分享新的情绪词汇</div>
+                        <div className="step-number english">Step 4</div>
+                        <div className="step-title">分享你的情绪词汇</div>
                     </div>
                 </div>
 
                 <div className="input-container">
                     {currentStep === 1 && (
                         <>
-                            <div className="input-box">
+                            <div className="input-box" style={{ minHeight: '200px' }}>
                                 <textarea 
                                     placeholder="输入你的心情，生成你的情绪词汇。
-你可以描述发生了什么事情，你有什么样的感受......" 
+你可以描述发生了什么事情，你有什么样的感受……" 
                                     value={inputText}
                                     onChange={handleInputChange}
                                     className="emotion-input"
@@ -193,7 +190,7 @@ export const Generation = () => {
                                 <div className="character-count">{characterCount}/{maxCharacters}字</div>
                             </div>
                             <button 
-                                className="next-button" 
+                                className="btn-primary next-button" 
                                 onClick={generateEmotionWord}
                                 disabled={loading}
                             >
@@ -219,7 +216,7 @@ export const Generation = () => {
                                     <div className="response-content">{aiResponses.zhipu}</div>
                                 </div>
                             </div>
-                            <button className="next-button" onClick={handleNextStep}>
+                            <button className="btn-primary next-button" onClick={handleNextStep}>
                                 → 下一步
                             </button>
                         </div>
@@ -227,10 +224,10 @@ export const Generation = () => {
 
                     {currentStep === 3 && (
                         <div className="result-container">
-                            <h3>请选择您最满意的情感词汇：</h3>
+                            <h3>请选择你最满意的情感词汇：</h3>
                             <div className="word-selection">
                                 {/* 这里可以添加选择词汇的UI */}
-                                <button className="next-button" onClick={handleNextStep}>
+                                <button className="btn-primary next-button" onClick={handleNextStep}>
                                     → 下一步
                                 </button>
                             </div>
@@ -239,13 +236,13 @@ export const Generation = () => {
 
                     {currentStep === 4 && (
                         <div className="result-container">
-                            <h3>请留下您的名字：</h3>
+                            <h3>请留下你的名字：</h3>
                             <input 
                                 type="text" 
-                                placeholder="您的名字（可选）" 
+                                placeholder="你的名字（可选）" 
                                 className="name-input"
                             />
-                            <button className="submit-button">
+                            <button className="btn-primary">
                                 提交
                             </button>
                         </div>
