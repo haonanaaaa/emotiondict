@@ -4,72 +4,35 @@
     /* padding: 20px; */
     font-family: 'Arial', sans-serif;
     max-width: 1440px;
+    height: 100%;
     margin: 0 auto;
     padding: 160px 40px 80px;
 }
-
+    
 .generation-header {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #e0e0e0;
-    margin-bottom: 30px;
-}
-
-.title {
-    display: flex;
-    align-items: baseline;
-}
-
-.title h1 {
-    /* -webkit-text-stroke-width: 1px black;
-    filter: blur(2px); */
-    /* transform: scaleX(-1); */
-    font-size: 24px;
-    font-weight: 500;
-    margin: 0;
-}
-
-.subtitle {
-    font-size: 16px;
-    color: #666;
-    margin-left: 10px;
-    font-style: italic;
-}
-
-.nav-links {
-    display: flex;
-    gap: 20px;
-}
-
-.nav-link {
-    text-decoration: none;
-    color: #333;
-    font-size: 16px;
-    transition: color 0.3s;
-}
-
-.nav-link:hover {
-    color: #000;
+    flex-direction: column;
 }
 
 .generation-content {
     display: flex;
-    gap: 30px;
+    gap: 130px; /* 将间距从30px增加到50px */
     padding: 20px 20px;
 }
 
 .steps-container {
+    font-size: var(--font-sm);
+    font-family: 'noto-serif-sc';
     width: 30%;
     padding-right: 20px;
 }
 
 .step {
-    margin-bottom: 30px;
+    margin-bottom: var(--spacing-lg);
     opacity: 0.5;
     transition: opacity 0.3s, color 0.3s;
     color: #999; /* 默认灰色文字 */
+    font-family: 'noto-serif-sc';
 }
 
 .step.active {
@@ -78,18 +41,25 @@
 }
 
 .step-number {
-    font-size: 16px;
     font-weight: bold;
+    font-style: italic;
+    margin-bottom: var(--spacing-sm);
+    color: var(--text-light);
+}
+
+.step-title {
     margin-bottom: 15px;
     position: relative;
     display: inline-block;
     color: inherit; /* 继承父元素颜色 */
+    font-family: 'Kai';
 }
 
 .step-title {
     font-size: 20px;
     margin-bottom: 10px;
     color: inherit; /* 继承父元素颜色 */
+    font-family: 'noto-serif-sc';
 }
 
 .step-number::before {
@@ -114,11 +84,13 @@
 .step-title {
     font-size: 20px;
     margin-bottom: 10px;
+    font-family: 'noto-serif-sc';
 }
 
 .step-hints {
-    font-size: 12px;
-    color: #666;
+    font-family: 'Kai';
+    font-size: var(--font-xs);
+    color: var(--text-light);
     margin-left: 20px;
 }
 
@@ -148,7 +120,6 @@
     /* font-family: 'Noto Serif SC'; */
     font-family: 'songti';
     width: 100%;
-    flex: 1;
     height: 90%;
     border: none;
     resize: none;
@@ -205,7 +176,6 @@
     /* border: 1px solid #e0e0e0; */
     /* border-radius: 10px; */
 }
-
 
 /* 在现有CSS的基础上添加以下样式 */
 
@@ -399,15 +369,64 @@
     cursor: not-allowed;
 }
 
-/* 添加圆圈选择器样式 */
-.circle-selector {
-    /* margin-top: 15px; */
-    font-size: 48px;
-    color: black;
-    cursor: pointer;
-    text-align: center;
+/* 响应式设计 */
+@media (max-width: 1024px) {
+    .generation-container {
+        padding-top: 100px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
 }
 
-.circle-selector:hover {
-    color: #E84E50;
+@media (max-width: 768px) {
+    .generation-content {
+        flex-direction: column;
+    }
+    
+    .steps-container, .input-container {
+        width: 100%;
+    }
+    
+    .emotion-input {
+        min-height: 250px;
+    }
+    
+    .api-responses {
+        gap: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .generation-container {
+        padding: 20px;
+    }
+    
+        .step-number {
+            font-size: 14px;
+        }
+        
+        .step-title {
+            font-size: 16px;
+        }
+        
+        .emotion-input {
+            font-size: var(--font-md);
+            min-height: 200px;
+        }
+        
+        .api-response {
+            padding: 10px;
+        }
+    /* 添加圆圈选择器样式 */
+    .circle-selector {
+        /* margin-top: 15px; */
+        font-size: 48px;
+        color: black;
+        cursor: pointer;
+        text-align: center;
+    }
+
+    .circle-selector:hover {
+        color: #E84E50;
+    }
 }

@@ -95,7 +95,7 @@ export const Gallery = () => {
         // 将granularity从0-5映射到0-1em
         return `blur(${(5 - granularity)}px)`;
     };
-    
+
     return (
         <>
             <div className="intro-section">
