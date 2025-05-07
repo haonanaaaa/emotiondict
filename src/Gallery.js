@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
@@ -11,23 +11,52 @@ import Wordcloud from './components/Wordcloud';
 import { Navbar } from './NavBar';
 
 export const Gallery = () => {
-    const emotions = [
-        { id: 1, name: "寂众", pinyin: "jì zhòng", granularity: 0, potency: 0, intensity: 3, complexity: 5, wordcloud: ["情绪雪崩​", "​泪崩", "心神不定", "潸然泪下", "能量透支性哭泣", "​崩溃", "精神恍惚​", "失魂落魄", "悲从中来​", "​泪崩1", "心神不定1", "潸然泪下1", "能量透支性哭泣1", "​崩溃1", "精神恍惚1​", "失魂落魄1", "悲从中来1​"], context: "王成之秋，七月既望，苏子与客泛舟游于赤壁之下。清风徐来，水波不兴。举酒属客，请明月之诗，歌窈窕之章。少焉，月出于东山之上，徘徊于斗牛之间。王成之秋，七月既望，苏子与客泛舟游于赤壁之下。清风徐来，水波不兴。举酒属客，请明月之诗，歌窈窕之章。少焉，月出于东山之上，徘徊于斗牛之间。" },
-        { id: 2, name: "空愉", pinyin: "kong yu", granularity: 5, potency: 1, intensity: 4, complexity: 1, context: "无所事事的快乐。" },
-        { id: 3, name: "替窘", pinyin: "ti jiong", granularity: 2, potency: 0, intensity: 2, complexity: 3, context: "当你在地铁中凝视陌生人时，突然惊觉对方也有完整的悲欢离合。这种'存在主义式的共情'，让日常的孤独感升华为对人类共同命运的悲悯。" },
-        { id: 4, name: "一二三", pinyin: "jì jì", granularity: 3, potency: 0, intensity: 0, complexity: 2, context: "当你在地铁中凝视陌生人时，突然惊觉对方也有完整的悲欢离合。这种'存在主义式的共情'，让日常的孤独感升华为对人类共同命运的悲悯。" },
-        { id: 5, name: "寂寂", pinyin: "jì jì", granularity: 4, potency: 0, intensity: 2, complexity: 0, context: "当你在地铁中凝视陌生人时，突然惊觉对方也有完整的悲欢离合。这种'存在主义式的共情'，让日常的孤独感升华为对人类共同命运的悲悯。" },
-        { id: 6, name: "寂寂", pinyin: "jì jì", granularity: 5, potency: 1, intensity: 1, complexity: 3, context: "当你在地铁中凝视陌生人时，突然惊觉对方也有完整的悲欢离合。这种'存在主义式的共情'，让日常的孤独感升华为对人类共同命运的悲悯。" },
-        { id: 7, name: "寂寂", pinyin: "jì jì", granularity: 3, potency: 1, intensity: 0, complexity: 2, context: "当你在地铁中凝视陌生人时，突然惊觉对方也有完整的悲欢离合。这种'存在主义式的共情'，让日常的孤独感升华为对人类共同命运的悲悯。" },
-        { id: 8, name: "寂寂", pinyin: "jì jì", granularity: 1, potency: 1, intensity: 5, complexity: 2, context: "当你在地铁中凝视陌生人时，突然惊觉对方也有完整的悲欢离合。这种'存在主义式的共情'，让日常的孤独感升华为对人类共同命运的悲悯。" },
-        { id: 9, name: "寂众", pinyin: "jì zhòng", granularity: 0, potency: 0, intensity: 5, complexity: 5, context: "当你在地铁中凝视陌生人时，突然惊觉对方也有完整的悲欢离合。这种'存在主义式的共情'，让日常的孤独感升华为对人类共同命运的悲悯。" },
-        { id: 10, name: "寂寂", pinyin: "jì jì", granularity: 3, potency: 1, intensity: 2, complexity: 1, context: "当你在地铁中凝视陌生人时，突然惊觉对方也有完整的悲欢离合。这种'存在主义式的共情'，让日常的孤独感升华为对人类共同命运的悲悯。" },
-        { id: 11, name: "孤寂", pinyin: "gū jì", granularity: 5, potency: 0, intensity: 2, complexity: 4, context: "内心深处的孤独感。" },
-        { id: 12, name: "静怡", pinyin: "jìng yí", granularity: 0, potency: 0, intensity: 1, complexity: 3, context: "安静而愉悦的心情。" },
-    ];
+    // 将静态数组替换为状态
+    const [emotions, setEmotions] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    
+    // 在组件挂载时从数据库获取情绪词汇
+    useEffect(() => {
+        const fetchEmotions = async () => {
+            try {
+                setLoading(true);
+                const response = await fetch('http://localhost:5000/api/emotions');
+                
+                if (!response.ok) {
+                    throw new Error(`获取数据失败: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                // 处理API返回的数据，确保格式与组件期望的一致
+                const formattedData = data.map(item => ({
+                    id: item.id,
+                    name: item.selectedWord || '未命名',
+                    pinyin: item.selectedPinyin || '',
+                    granularity: parseInt(item.granularity?.split(',')[0] || 0),
+                    potency: parseInt(item.valence?.split(',')[0] || 0),
+                    intensity: parseInt(item.intensity?.split(',')[0] || 0),
+                    complexity: parseInt(item.complexity?.split(',')[0] || 0),
+                    wordcloud: Object.keys(JSON.parse(item.wordFrequency || '{}')),
+                    context: item.scene || '无描述'
+                }));
+                
+                setEmotions(formattedData);
+                setLoading(false);
+            } catch (err) {
+                console.error('获取情绪词汇失败:', err);
+                setError(err.message);
+                setLoading(false);
+            }
+        };
+        
+        fetchEmotions();
+    }, []);
     
     const [selectedEmotion, setSelectedEmotion] = useState(null);
     
+    // 其余代码保持不变
     const handleCardClick = (id) => {
         setSelectedEmotion(emotions.find(e => e.id === id));
     };
