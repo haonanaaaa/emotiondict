@@ -331,143 +331,118 @@ export const Generation = () => {
                         <div className="step-number english">Step 1</div>
                         <div className="step-title">描述你的情绪场景</div>
                     </div>
-                    
+
                     <div className={`step ${currentStep >= 2 ? 'active' : ''}`}>
                         <div className="step-number english">Step 2</div>
                         <div className="step-title">生成情绪词汇</div>
                     </div>
-                    
+
                     <div className={`step ${currentStep >= 3 ? 'active' : ''}`}>
                         <div className="step-number english">Step 3</div>
                         <div className="step-title">选择情绪词汇</div>
                     </div>
 
-                    <div className={`step ${currentStep >= 4 ? 'active' : ''}`}>
-                        <div className="step-number english">Step 4</div>
-                        <div className="step-title">分享你的情绪词汇</div>
-                    </div>
                 </div>
 
-                {currentStep === 1 && (
-                    <div className="input-container">
-                        <textarea
-                            value={inputText}
-                            onChange={handleInputChange}
-                            placeholder="请描述一个让你产生情绪波动的场景..."
-                            maxLength={maxCharacters}
-                        />
-                        <div className="character-count">
-                            <span className={characterCount === maxCharacters ? 'max-reached' : ''}>
-                                {characterCount}
-                            </span>
-                            /{maxCharacters}
+                <div className="input-container">
+                    {(currentStep === 1 || currentStep ===2) && (
+                        <>
+                            <div className="input-box">
+                                <textarea 
+                                    placeholder="输入你的心情，生成你的情绪词汇。
+你可以描述发生了什么事情，你有什么样的感受......" 
+                                    value={inputText}
+                                    onChange={handleInputChange}
+                                    className="emotion-input"
+                                />
+                                <div className="character-count">{characterCount}/{maxCharacters}字</div>
+                            </div>
+                            <button 
+                                className="next-button" 
+                                onClick={generateEmotionWord}
+                                disabled={loading}
+                            >
+                                {loading ? '生成中...' : '→ 生成我的情绪词汇'}
+                            </button>
+                        </>
+                    )}
+
+                    {currentStep === 3 && (
+                        <div className="result-container">
+                            <div className='scene'>"{inputText}"</div>
+                            <div className="api-responses">
+                                <div 
+                                    className={`api-response ${selectedResponse === 'deepseek' ? 'selected' : ''}`}
+                                    onClick={() => handleSelectResponse('deepseek')}
+                                >
+                                    <div className="response-content">
+                                        {extractEmotionWord(aiResponses.deepseek).split('').map((char, index) => (
+                                            <div key={index} className="character-grid">
+                                                <div className="pinyin">{getPinyin(char)}</div>
+                                                <span>{char}</span>
+                                                <div className="diagonal-1"></div>
+                                                <div className="diagonal-2"></div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div className="circle-selector">
+                                        {selectedResponse === 'deepseek' ? 
+                                            <FontAwesomeIcon icon={faCheck} style={{color: "#e84e50"}} /> : 
+                                            '○'}
+                                    </div>
+                                </div>
+                                <div 
+                                    className={`api-response ${selectedResponse === 'douBao' ? 'selected' : ''}`}
+                                    onClick={() => handleSelectResponse('douBao')}
+                                >
+                                    <div className="response-content">
+                                        {extractEmotionWord(aiResponses.douBao).split('').map((char, index) => (
+                                            <div key={index} className="character-grid">
+                                                <div className="pinyin">{getPinyin(char)}</div>
+                                                <span>{char}</span>
+                                                <div className="diagonal-1"></div>
+                                                <div className="diagonal-2"></div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div className="circle-selector">
+                                        {selectedResponse === 'douBao' ? 
+                                            <FontAwesomeIcon icon={faCheck} style={{color: "#e84e50"}} /> : 
+                                            '○'}
+                                    </div>
+                                </div>
+                                <div 
+                                    className={`api-response ${selectedResponse === 'zhipu' ? 'selected' : ''}`}
+                                    onClick={() => handleSelectResponse('zhipu')}
+                                >
+                                    <div className="response-content">
+                                        {extractEmotionWord(aiResponses.zhipu).split('').map((char, index) => (
+                                            <div key={index} className="character-grid">
+                                                <div className="pinyin">{getPinyin(char)}</div>
+                                                <span>{char}</span>
+                                                <div className="diagonal-1"></div>
+                                                <div className="diagonal-2"></div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div className="circle-selector">
+                                        {selectedResponse === 'zhipu' ? 
+                                            <FontAwesomeIcon icon={faCheck} style={{color: "#e84e50"}} /> : 
+                                            '○'}
+                                    </div>
+                                </div>
+                            </div>
+                            <button 
+                                className="next-button" 
+                                onClick={handleNextStep}
+                                disabled={!selectedResponse} // 如果没有选择，禁用下一步按钮
+                            >
+                                → 保存进情绪词典
+                            </button>
                         </div>
-                        <button 
-                            className="next-button"
-                            onClick={generateEmotionWord}
-                            disabled={!inputText.trim() || loading}
-                        >
-                            → 生成情绪词汇
-                        </button>
-                    </div>
-                )}
+                    )}
 
-                {currentStep === 2 && loading && (
-                    <div className="loading-container">
-                        <div className="loading-spinner"></div>
-                        <p>正在分析你的情绪场景...</p>
-                    </div>
-                )}
-
-                {currentStep === 3 && (
-                    <div className="result-container">
-                        <div className='scene'>"{inputText}"</div>
-                        <div className="api-responses">
-                            <div 
-                                className={`api-response ${selectedResponse === 'deepseek' ? 'selected' : ''}`}
-                                onClick={() => handleSelectResponse('deepseek')}
-                            >
-                                <div className="response-content">
-                                    {extractEmotionWord(aiResponses.deepseek).split('').map((char, index) => (
-                                        <div key={index} className="character-grid">
-                                            <div className="pinyin">{getPinyin(char)}</div>
-                                            <span>{char}</span>
-                                            <div className="diagonal-1"></div>
-                                            <div className="diagonal-2"></div>
-                                        </div>
-                                    ))}
-                                </div>
-                                <div className="circle-selector">
-                                    {selectedResponse === 'deepseek' ? 
-                                        <FontAwesomeIcon icon={faCheck} style={{color: "#e84e50"}} /> : 
-                                        '○'}
-                                </div>
-                            </div>
-                            <div 
-                                className={`api-response ${selectedResponse === 'douBao' ? 'selected' : ''}`}
-                                onClick={() => handleSelectResponse('douBao')}
-                            >
-                                <div className="response-content">
-                                    {extractEmotionWord(aiResponses.douBao).split('').map((char, index) => (
-                                        <div key={index} className="character-grid">
-                                            <div className="pinyin">{getPinyin(char)}</div>
-                                            <span>{char}</span>
-                                            <div className="diagonal-1"></div>
-                                            <div className="diagonal-2"></div>
-                                        </div>
-                                    ))}
-                                </div>
-                                <div className="circle-selector">
-                                    {selectedResponse === 'douBao' ? 
-                                        <FontAwesomeIcon icon={faCheck} style={{color: "#e84e50"}} /> : 
-                                        '○'}
-                                </div>
-                            </div>
-                            <div 
-                                className={`api-response ${selectedResponse === 'zhipu' ? 'selected' : ''}`}
-                                onClick={() => handleSelectResponse('zhipu')}
-                            >
-                                <div className="response-content">
-                                    {extractEmotionWord(aiResponses.zhipu).split('').map((char, index) => (
-                                        <div key={index} className="character-grid">
-                                            <div className="pinyin">{getPinyin(char)}</div>
-                                            <span>{char}</span>
-                                            <div className="diagonal-1"></div>
-                                            <div className="diagonal-2"></div>
-                                        </div>
-                                    ))}
-                                </div>
-                                <div className="circle-selector">
-                                    {selectedResponse === 'zhipu' ? 
-                                        <FontAwesomeIcon icon={faCheck} style={{color: "#e84e50"}} /> : 
-                                        '○'}
-                                </div>
-                            </div>
-                        </div>
-                        <button 
-                            className="next-button" 
-                            onClick={handleNextStep}
-                            disabled={!selectedResponse}
-                        >
-                            → 保存进情绪词典
-                        </button>
-                    </div>
-                )}
-
-                {currentStep === 4 && (
-                    <div className="result-container">
-                        <h3>请留下你的名字：</h3>
-                        <input 
-                            type="text" 
-                            placeholder="你的名字（可选）" 
-                            className="name-input"
-                        />
-                        <button className="btn-primary">
-                            提交
-                        </button>
-                    </div>
-                )}
-
+                </div>
             </div>
         </div>
     );

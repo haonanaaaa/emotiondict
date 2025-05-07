@@ -1,26 +1,72 @@
 .generation-container {
+    /* max-width: 1200px;
+    margin: 0 auto; */
+    /* padding: 20px; */
+    font-family: 'Arial', sans-serif;
     max-width: 1440px;
-    height: 100%;
     margin: 0 auto;
-    padding: 160px 20px 40px;
+    padding: 160px 40px 80px;
+}
+
+.generation-header {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 30px;
+}
+
+.title {
+    display: flex;
+    align-items: baseline;
+}
+
+.title h1 {
+    /* -webkit-text-stroke-width: 1px black;
+    filter: blur(2px); */
+    /* transform: scaleX(-1); */
+    font-size: 24px;
+    font-weight: 500;
+    margin: 0;
+}
+
+.subtitle {
+    font-size: 16px;
+    color: #666;
+    margin-left: 10px;
+    font-style: italic;
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: #333;
+    font-size: 16px;
+    transition: color 0.3s;
+}
+
+.nav-link:hover {
+    color: #000;
 }
 
 .generation-content {
     display: flex;
-    gap: var(--spacing-lg);
-    padding: 0;
-    flex: 1;
+    gap: 30px;
+    padding: 20px 20px;
 }
 
 .steps-container {
-    font-size: var(--font-sm);
     width: 30%;
+    padding-right: 20px;
 }
 
 .step {
-    margin-bottom: var(--spacing-lg);
+    margin-bottom: 30px;
     opacity: 0.5;
     transition: opacity 0.3s, color 0.3s;
     color: #999; /* 默认灰色文字 */
@@ -32,13 +78,8 @@
 }
 
 .step-number {
+    font-size: 16px;
     font-weight: bold;
-    font-style: italic;
-    margin-bottom: var(--spacing-sm);
-    color: var(--text-light);
-}
-
-.step-title {
     margin-bottom: 15px;
     position: relative;
     display: inline-block;
@@ -76,9 +117,8 @@
 }
 
 .step-hints {
-    font-family: 'Kai';
-    font-size: var(--font-xs);
-    color: var(--text-light);
+    font-size: 12px;
+    color: #666;
     margin-left: 20px;
 }
 
@@ -91,17 +131,15 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    flex: 1;
+    /* padding-left: 100px; */
 }
 
 .input-box {
-    border: 2px solid var(--primary-color);
-    padding: var(--spacing-md);
-    margin-bottom: var(--spacing-lg);
+    border: 2px solid #ff0000;
+    /* border-radius: 10px; */
+    padding: 20px;
+    margin-bottom: 20px;
     position: relative;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
     height: 500px; /* 设置一个固定高度，比如400px */
 }
 
@@ -138,13 +176,26 @@
     position: absolute;
     bottom: 10px;
     right: 20px;
-    font-size: var(--font-xs);
-    color: var(--text-lighter);
-    font-family: 'Kai';
+    font-size: 12px;
+    color: #999;
 }
 
-.btn-primary {
+.next-button {
     align-self: flex-end;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.3s;
+}
+
+.next-button:hover {
+    background-color: #333;
 }
 
 .result-container {
@@ -154,6 +205,7 @@
     /* border: 1px solid #e0e0e0; */
     /* border-radius: 10px; */
 }
+
 
 /* 在现有CSS的基础上添加以下样式 */
 
@@ -326,70 +378,36 @@
     font-size: 16px;
 }
 
+.submit-button {
+    background-color: #000;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.submit-button:hover {
+    background-color: #333;
+}
+
 /* 禁用状态的按钮样式 */
 .next-button:disabled {
     background-color: #999;
     cursor: not-allowed;
 }
 
-/* 响应式设计 */
-@media (max-width: 1024px) {
-    .generation-container {
-        padding-top: 100px;
-        padding-left: 20px;
-        padding-right: 20px;
-    }
+/* 添加圆圈选择器样式 */
+.circle-selector {
+    /* margin-top: 15px; */
+    font-size: 48px;
+    color: black;
+    cursor: pointer;
+    text-align: center;
 }
 
-@media (max-width: 768px) {
-    .generation-content {
-        flex-direction: column;
-    }
-    
-    .steps-container, .input-container {
-        width: 100%;
-    }
-    
-    .emotion-input {
-        min-height: 250px;
-    }
-    
-    .api-responses {
-        gap: 15px;
-    }
-}
-
-@media (max-width: 480px) {
-    .generation-container {
-        padding: 20px;
-    }
-    
-        .step-number {
-            font-size: 14px;
-        }
-        
-        .step-title {
-            font-size: 16px;
-        }
-        
-        .emotion-input {
-            font-size: var(--font-md);
-            min-height: 200px;
-        }
-        
-        .api-response {
-            padding: 10px;
-        }
-    /* 添加圆圈选择器样式 */
-    .circle-selector {
-        /* margin-top: 15px; */
-        font-size: 48px;
-        color: black;
-        cursor: pointer;
-        text-align: center;
-    }
-
-    .circle-selector:hover {
-        color: #E84E50;
-    }
+.circle-selector:hover {
+    color: #E84E50;
 }

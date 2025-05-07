@@ -53,6 +53,7 @@
 
 /* 词语网格布局 */
 .characters-grid {
+
   display: grid;
   grid-template-columns: repeat(6, 120px);
   justify-content: center;
@@ -329,11 +330,5 @@
     grid-template-columns: repeat(2, 120px);
     gap: var(--spacing-md);
   }
-}
-
-.gallery-container {
-    position: relative;
-    min-height: 100vh;
-    width: 100%;
 }
 
