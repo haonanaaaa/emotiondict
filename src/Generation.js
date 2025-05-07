@@ -36,9 +36,67 @@ export const Generation = () => {
                 return;
             }
             
-            const analysisResult = PreDB();
-            console.log('预处理结果:', analysisResult);
-            // setCurrentStep(currentStep + 1);
+            if (!selectedResponse) {
+                alert('请选择一个情绪词汇');
+                return;
+            }
+            
+            // 调用保存函数
+            saveToDatabase();
+        }
+    };
+
+    // 添加保存到数据库的函数
+    const saveToDatabase = async () => {
+        try {
+            // 获取预处理结果
+            const { positionModes, wordFrequency } = PreDB();
+            
+            // 获取用户选择的情绪词汇
+            const selectedWord = extractEmotionWord(aiResponses[selectedResponse]);
+            
+            // 获取选中词汇的拼音
+            const selectedPinyin = selectedWord.split('').map(char => getPinyin(char));
+            
+            // 准备要发送的数据
+            const dataToSave = {
+                scene: inputText,
+                selectedProvider: selectedResponse,
+                selectedWord: selectedWord,
+                selectedPinyin: selectedPinyin.join(','),
+                valence: positionModes[0].join(','),
+                intensity: positionModes[1].join(','),
+                complexity: positionModes[2].join(','),
+                granularity: positionModes[3].join(','),
+                wordFrequency: JSON.stringify(wordFrequency),
+                createdAt: new Date().toISOString()
+            };
+            
+            console.log('准备保存的数据:', dataToSave);
+            
+            // 发送数据到后端API
+            const response = await fetch('http://localhost:5000/api/save-emotion', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(dataToSave)
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                console.log('数据保存成功:', result);
+                alert('情绪词汇已成功保存到词典！');
+                // 保存成功后前进到下一步
+                setCurrentStep(currentStep + 1);
+            } else {
+                console.error('数据保存失败:', result.error);
+                alert('保存失败: ' + result.error);
+            }
+        } catch (error) {
+            console.error('保存数据时出错:', error);
+            alert('保存过程中出错，请稍后再试');
         }
     };
 
@@ -132,11 +190,18 @@ export const Generation = () => {
                 callZhipuAPI(inputText)
             ]);
             
-            // 更新响应结果
+            // 清理API响应中的特殊字符
+            const cleanResponse = (text) => {
+                if (!text) return '';
+                // 去除Markdown标记字符 * # 等
+                return text.replace(/[*#]/g, '');
+            };
+            
+            // 更新响应结果，并清理特殊字符
             setAiResponses({
-                deepseek: deepseekResponse,
-                douBao: douBaoResponse,
-                zhipu: zhipuResponse
+                deepseek: cleanResponse(deepseekResponse),
+                douBao: cleanResponse(douBaoResponse),
+                zhipu: cleanResponse(zhipuResponse)
             });
             
             // 记录结束时间并计算总用时
@@ -159,7 +224,7 @@ export const Generation = () => {
         if (!response) return '';
         
         // 尝试匹配"情绪词汇："后面的内容
-        const match = response.match(/生成词汇[：:]\s*([^\n]+)/);
+        const match = response.match(/生成词汇[：:]\s*([^、，,\n]+)/);
         if (match && match[1]) {
             return match[1].trim();
         }
@@ -203,7 +268,7 @@ export const Generation = () => {
         console.log("所有数组:", allArrays);
 
         // 分别求第1、2、3个元素的众数
-        const positionModes = [1, 2, 3].map(position => {
+        const positionModes = [1, 2, 3, 4].map(position => {
             const posIndex = position - 1; // 转为0-based索引
             
             // 收集每个数组在该位置的元素
@@ -236,7 +301,7 @@ export const Generation = () => {
 
         console.log("词频统计结果:", wordFrequency);
 
-        console.log("三个位置的众数结果:", positionModes);
+        console.log("四个位置的众数结果:", positionModes);
         return {
             positionModes,
             wordFrequency
