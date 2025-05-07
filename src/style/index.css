@@ -1,0 +1,88 @@
+/* 网页全局样式在这个文件里更新 */
+@font-face {
+  font-family: 'Noto Serif CJK';
+  src: local('Noto Serif CJK SC'),
+       local('Noto Serif CJK TC'),
+       local('Noto Serif CJK JP'),
+       local('Noto Serif CJK KR');
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'Cormorant Garamond';
+  src: url('../assets/font/CormorantGaramond-SemiBold.ttf');
+}
+
+@font-face {
+  font-family: 'Kai';
+  src: url('../assets/font/STKAITI.TTF');
+}
+
+@font-face {
+  font-family: 'Code Font';
+  src: local('source-code-pro'),
+       local(Menlo),
+       local(Monaco),
+       local(Consolas),
+       local('Courier New');
+}
+
+:root {
+  --primary-color: #E54D2E;
+  --secondary-color: #fff;
+  --text-color: #333;
+  --text-light: #666;
+  --text-lighter: #555;
+  --border-color: #e53935;
+  --background-light: #f9f9f9;
+  --background-overlay: rgba(0, 0, 0, 0.7);
+  --accent-color: #6a75e0;
+  
+  /* Spacing */
+  --spacing-xs: 5px;
+  --spacing-sm: 10px;
+  --spacing-md: 20px;
+  --spacing-lg: 40px;
+  --spacing-xl: 60px;
+  --spacing-xxl: 80px;
+  
+  /* Font sizes */
+  --font-xs: 16px;
+  --font-sm: 20px;
+  --font-md: 24px;
+  --font-lg: 36px;
+  --font-xl: 48px;
+  
+  /* Layout */
+  --container-max-width: 1440px;
+  --border-radius: 8px;
+  
+  font-family: 'Noto Serif CJK', serif;
+}
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: 'Code Font', monospace;
+}
+
+/* 按钮样式 */
+.btn-primary {
+  text-decoration: none;
+  background-color: #000;
+  color: var(--secondary-color);
+  border: none;
+  padding: 18px 40px;
+  font-size: var(--font-xs);
+  cursor: pointer;
+  border-radius: 36px;
+  transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+  background-color: var(--text-color);
+} 
