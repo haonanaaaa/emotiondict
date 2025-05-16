@@ -7,6 +7,7 @@ import { pinyin } from 'pinyin-pro'; // 导入拼音库
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import './style/Generation.css';
+import LoadingAnimation from './components/LoadingAnimation';
 
 export const Generation = () => {
     const [currentStep, setCurrentStep] = useState(1);
@@ -19,6 +20,8 @@ export const Generation = () => {
     const [loading, setLoading] = useState(false);
     const [characterCount, setCharacterCount] = useState(0);
     const maxCharacters = 200;
+    // 新增状态用于测试加载动画
+    const [testLoading, setTestLoading] = useState(false);
 
     const handleInputChange = (e) => {
         const text = e.target.value;
@@ -26,6 +29,14 @@ export const Generation = () => {
             setInputText(text);
             setCharacterCount(text.length);
         }
+    };
+
+    // 添加测试加载动画的函数
+    const testLoadingAnimation = () => {
+        setTestLoading(true);
+        setTimeout(() => {
+            setTestLoading(false);
+        }, 5000); // 5秒后关闭动画
     };
 
     const handleNextStep = () => {
@@ -75,7 +86,7 @@ export const Generation = () => {
             console.log('准备保存的数据:', dataToSave);
             
             // 发送数据到后端API
-            const response = await fetch('http://localhost:5000/api/save-emotion', {
+            const response = await fetch('http://localhost:5001/api/save-emotion', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -106,7 +117,7 @@ export const Generation = () => {
     // 修改API调用方法，通过后端代理
     const callDeepSeekAPI = async (text) => {
         try {
-            const response = await fetch('http://localhost:5000/api/generate-emotion', {
+            const response = await fetch('http://localhost:5001/api/generate-emotion', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -128,7 +139,7 @@ export const Generation = () => {
     // 同样修改其他API调用方法
     const callDouBaoAPI = async (text) => {
         try {
-            const response = await fetch('http://localhost:5000/api/generate-emotion', {
+            const response = await fetch('http://localhost:5001/api/generate-emotion', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -149,7 +160,7 @@ export const Generation = () => {
     
     const callZhipuAPI = async (text) => {
         try {
-            const response = await fetch('http://localhost:5000/api/generate-emotion', {
+            const response = await fetch('http://localhost:5001/api/generate-emotion', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -341,31 +352,51 @@ export const Generation = () => {
                         <div className="step-number english">Step 3</div>
                         <div className="step-title">选择情绪词汇</div>
                     </div>
-
                 </div>
 
                 <div className="input-container">
                     {(currentStep === 1 || currentStep ===2) && (
                         <>
-                            <div className="input-box">
-                        <textarea
+                            <div className="input-box" style={{ position: 'relative' }}>
+                                {/* 在输入框内显示加载动画 */}
+                                {(loading || testLoading) && 
+                                    <div style={{ 
+                                        position: 'absolute', 
+                                        top: 0, 
+                                        left: 0, 
+                                        width: '100%', 
+                                        height: '100%',
+                                        zIndex: 100
+                                    }}>
+                                        <LoadingAnimation isVisible={true} />
+                                    </div>
+                                }
+                                <textarea
                                     placeholder="输入你的心情，生成你的情绪词汇。
 你可以描述发生了什么事情，你有什么样的感受......" 
-                            value={inputText}
-                            onChange={handleInputChange}
+                                    value={inputText}
+                                    onChange={handleInputChange}
                                     className="emotion-input"
-                        />
+                                />
                                 <div className="character-count">{characterCount}/{maxCharacters}字</div>
-                        </div>
-                        <button 
-                            className="next-button"
-                            onClick={generateEmotionWord}
+                            </div>
+                            <button 
+                                className="next-button"
+                                onClick={generateEmotionWord}
                                 disabled={loading}
-                        >
+                            >
                                 {loading ? '生成中...' : '→ 生成我的情绪词汇'}
-                        </button>
+                            </button>
+                            {/* 添加测试按钮 */}
+                            {/* <button 
+                                className="test-button"
+                                onClick={testLoadingAnimation}
+                                style={{ marginTop: '10px', backgroundColor: '#888', color: 'white', padding: '8px 16px', borderRadius: '4px', cursor: 'pointer' }}
+                            >
+                                测试下雨动画效果
+                            </button> */}
                         </>
-                )}
+                    )}
 
                 {currentStep === 3 && (
                     <div className="result-container">
