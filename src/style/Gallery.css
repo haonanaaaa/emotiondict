@@ -59,6 +59,9 @@
   gap: var(--spacing-xl);
   margin: var(--spacing-xl) auto;
   padding: 0 var(--spacing-md);
+  min-height: 500px; /* 确保网格有固定最小高度，防止排序时闪烁 */
+  position: relative; /* 为绝对定位的子元素提供参考 */
+  will-change: transform, opacity; /* 优化动画性能 */
 }
 
 .word-container {
@@ -68,7 +71,9 @@
   border: 1px solid var(--border-color);
   width: 120px;
   box-sizing: border-box;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: all 0.5s ease-in-out;
+  will-change: transform, opacity; /* 优化动画性能 */
+  transform-origin: center; /* 设置变换的原点为中心 */
 }
 
 .word-container:hover {

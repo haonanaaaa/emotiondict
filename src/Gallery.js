@@ -1,27 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import './style/Gallery.css';
 
 import Wordcloud from './components/Wordcloud';
+import SortControls from './components/SortControls';
 
 // 情感粒度的核心是主观情绪体验的细致性，可以根据用户输入的文本长度来判断
 import { Navbar } from './NavBar';
 
 export const Gallery = () => {
-    // 将静态数组替换为状态
     const [emotions, setEmotions] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [sortBy, setSortBy] = useState('createdAt');
+    const [sortOrder, setSortOrder] = useState('desc');
+    const [animating, setAnimating] = useState(false);
     
     // 在组件挂载时从数据库获取情绪词汇
     useEffect(() => {
         const fetchEmotions = async () => {
             try {
                 setLoading(true);
-                const response = await fetch('http://localhost:5000/api/emotions');
+                const response = await fetch('http://localhost:5001/api/emotions');
                 
                 if (!response.ok) {
                     throw new Error(`获取数据失败: ${response.status}`);
@@ -29,7 +32,6 @@ export const Gallery = () => {
                 
                 const data = await response.json();
                 
-                // 处理API返回的数据，确保格式与组件期望的一致
                 const formattedData = data.map(item => ({
                     id: item.id,
                     name: item.selectedWord || '未命名',
@@ -39,7 +41,8 @@ export const Gallery = () => {
                     intensity: parseInt(item.intensity?.split(',')[0] || 0),
                     complexity: parseInt(item.complexity?.split(',')[0] || 0),
                     wordcloud: Object.keys(JSON.parse(item.wordFrequency || '{}')),
-                    context: item.scene || '无描述'
+                    context: item.scene || '无描述',
+                    createdAt: item.createdAt || new Date().toISOString()
                 }));
                 
                 setEmotions(formattedData);
@@ -56,6 +59,49 @@ export const Gallery = () => {
     
     const [selectedEmotion, setSelectedEmotion] = useState(null);
     
+    // 修改排序函数，添加动画控制
+    const handleSort = (field) => {
+        if (animating) return; // 如果动画正在进行中，忽略点击
+        
+        setAnimating(true); // 开始动画
+        
+        // 设置排序字段和顺序
+        setSortBy(field);
+        setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+        
+        // 给动画足够的时间完成
+        setTimeout(() => {
+            setAnimating(false);
+        }, 600); // 比过渡时间稍长一点
+    };
+
+    // 新增：获取排序后的情绪数据
+    const getSortedEmotions = () => {
+        return [...emotions].sort((a, b) => {
+            let comparison = 0;
+            switch (sortBy) {
+                case 'granularity':
+                    comparison = a.granularity - b.granularity;
+                    break;
+                case 'potency':
+                    comparison = a.potency - b.potency;
+                    break;
+                case 'intensity':
+                    comparison = a.intensity - b.intensity;
+                    break;
+                case 'complexity':
+                    comparison = a.complexity - b.complexity;
+                    break;
+                case 'createdAt':
+                    comparison = new Date(a.createdAt) - new Date(b.createdAt);
+                    break;
+                default:
+                    return 0;
+            }
+            return sortOrder === 'asc' ? comparison : -comparison;
+        });
+    };
+
     // 其余代码保持不变
     const handleCardClick = (id) => {
         setSelectedEmotion(emotions.find(e => e.id === id));
@@ -115,55 +161,82 @@ export const Gallery = () => {
                 </div>
             </div>
             
-            <div className="characters-grid">
-                {emotions.map((emotion) => {
-                    const charCount = emotion.name.length;
-                    
-                    return (
-                        <div 
-                            key={emotion.id} 
-                            className="word-container"
-                            onClick={() => handleCardClick(emotion.id)}
-                            style={{ 
-                                height: `${charCount * 120}px`,
-                                borderColor: emotion.potency > 3 ? 'var(--primary-color)' : '#0000ff'
-                            }}
-                        >
-                            {[...emotion.name].map((char, charIndex) => (
-                                <div key={charIndex} className="character-cell">
-                                    <div 
-                                        className="character-text"
-                                        style={{ 
-                                            color: getTextColor(emotion.intensity),
-                                            transform: getFlipTransform(emotion.complexity, charIndex === 0),
-                                            filter: getBlurEffect(emotion.granularity),
-                                            transition: 'all 0.3s ease'
-                                        }}
-                                    >{char}</div>
-                                    <div className="character-background">
-                                        <div 
-                                            className="background-line horizontal-line"
-                                            style={{ borderColor: emotion.potency > 3 ? 'var(--primary-color)' : '#0000ff' }}
-                                        ></div>
-                                        <div 
-                                            className="background-line vertical-line"
-                                            style={{ borderColor: emotion.potency > 3 ? 'var(--primary-color)' : '#0000ff' }}
-                                        ></div>
-                                        <div 
-                                            className="background-line diagonal-line diagonal-line-1"
-                                            style={{ borderColor: emotion.potency > 3 ? 'var(--primary-color)' : '#0000ff' }}
-                                        ></div>
-                                        <div 
-                                            className="background-line diagonal-line diagonal-line-2"
-                                            style={{ borderColor: emotion.potency > 3 ? 'var(--primary-color)' : '#0000ff' }}
-                                        ></div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    );
-                })}
-            </div>
+            <SortControls 
+                sortBy={sortBy} 
+                sortOrder={sortOrder} 
+                onSort={handleSort} 
+            />
+            
+            <LayoutGroup>
+                <div className="characters-grid">
+                    <AnimatePresence>
+                        {getSortedEmotions().map((emotion) => {
+                            const charCount = emotion.name.length;
+                            
+                            return (
+                                <motion.div 
+                                    key={emotion.id} 
+                                    className="word-container"
+                                    onClick={() => handleCardClick(emotion.id)}
+                                    style={{ 
+                                        height: `${charCount * 120}px`,
+                                        borderColor: emotion.potency > 3 ? 'var(--primary-color)' : '#0000ff'
+                                    }}
+                                    layout
+                                    layoutId={`emotion-${emotion.id}`}
+                                    transition={{ 
+                                        type: "spring", 
+                                        stiffness: 150, 
+                                        damping: 20,
+                                        duration: 0.5 
+                                    }}
+                                    animate={{ 
+                                        opacity: 1, 
+                                        scale: 1,
+                                        transition: { delay: 0.1 * Math.random() } // 添加随机延迟，使动画更自然
+                                    }}
+                                    initial={{ opacity: 0, scale: 0.8 }}
+                                    exit={{ opacity: 0, scale: 0.8 }}
+                                >
+                                    {[...emotion.name].map((char, charIndex) => (
+                                        <div key={charIndex} className="character-cell">
+                                            <motion.div 
+                                                className="character-text"
+                                                style={{ 
+                                                    color: getTextColor(emotion.intensity),
+                                                    transform: getFlipTransform(emotion.complexity, charIndex === 0),
+                                                    filter: getBlurEffect(emotion.granularity)
+                                                }}
+                                                initial={{ opacity: 0, y: 10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                transition={{ delay: 0.05 * charIndex, duration: 0.3 }}
+                                            >{char}</motion.div>
+                                            <div className="character-background">
+                                                <div 
+                                                    className="background-line horizontal-line"
+                                                    style={{ borderColor: emotion.potency > 3 ? 'var(--primary-color)' : '#0000ff' }}
+                                                ></div>
+                                                <div 
+                                                    className="background-line vertical-line"
+                                                    style={{ borderColor: emotion.potency > 3 ? 'var(--primary-color)' : '#0000ff' }}
+                                                ></div>
+                                                <div 
+                                                    className="background-line diagonal-line diagonal-line-1"
+                                                    style={{ borderColor: emotion.potency > 3 ? 'var(--primary-color)' : '#0000ff' }}
+                                                ></div>
+                                                <div 
+                                                    className="background-line diagonal-line diagonal-line-2"
+                                                    style={{ borderColor: emotion.potency > 3 ? 'var(--primary-color)' : '#0000ff' }}
+                                                ></div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </motion.div>
+                            );
+                        })}
+                    </AnimatePresence>
+                </div>
+            </LayoutGroup>
             
             <AnimatePresence>
                 {selectedEmotion && (
