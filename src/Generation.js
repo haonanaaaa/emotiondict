@@ -86,7 +86,10 @@ export const Generation = () => {
             console.log('准备保存的数据:', dataToSave);
             
             // 发送数据到后端API
-            const response = await fetch('http://localhost:5001/api/save-emotion', {
+            const apiUrl = process.env.NODE_ENV === 'production' 
+                    ? '/api/save-emotion'  // 生产环境使用相对路径
+                    : 'http://localhost:5000/api/emotions';  // 开发环境使用完整URL
+            const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -117,7 +120,11 @@ export const Generation = () => {
     // 修改API调用方法，通过后端代理
     const callDeepSeekAPI = async (text) => {
         try {
-            const response = await fetch('http://localhost:5001/api/generate-emotion', {
+
+            const apiUrl = process.env.NODE_ENV === 'production' 
+                    ? '/api/generate-emotion'  // 生产环境使用相对路径
+                    : 'http://localhost:5000/api/emotions';  // 开发环境使用完整URL
+            const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -139,7 +146,10 @@ export const Generation = () => {
     // 同样修改其他API调用方法
     const callDouBaoAPI = async (text) => {
         try {
-            const response = await fetch('http://localhost:5001/api/generate-emotion', {
+            const apiUrl = process.env.NODE_ENV === 'production' 
+                    ? '/api/generate-emotion'  // 生产环境使用相对路径
+                    : 'http://localhost:5000/api/emotions';  // 开发环境使用完整URL
+            const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -160,7 +170,10 @@ export const Generation = () => {
     
     const callZhipuAPI = async (text) => {
         try {
-            const response = await fetch('http://localhost:5001/api/generate-emotion', {
+            const apiUrl = process.env.NODE_ENV === 'production' 
+                    ? '/api/generate-emotion'  // 生产环境使用相对路径
+                    : 'http://localhost:5000/api/emotions';  // 开发环境使用完整URL
+            const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
