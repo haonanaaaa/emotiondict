@@ -8,7 +8,7 @@ import SortControls from './components/SortControls';
 import EmotionPopup from './components/EmotionPopup';
 
 // 情感粒度的核心是主观情绪体验的细致性，可以根据用户输入的文本长度来判断
-import { Navbar } from './NavBar';
+// import { Navbar } from './NavBar';
 
 export const Gallery = () => {
     const [emotions, setEmotions] = useState([]);

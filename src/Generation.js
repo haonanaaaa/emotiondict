@@ -102,8 +102,19 @@ export const Generation = () => {
             if (result.success) {
                 console.log('数据保存成功:', result);
                 alert('情绪词汇已成功保存到词典！');
-                // 保存成功后前进到下一步
-                setCurrentStep(currentStep + 1);
+                
+                // 重置所有状态，准备新的输入
+                setInputText('');
+                setCharacterCount(0);
+                setAiResponses({
+                    deepseek: '',
+                    douBao: '',
+                    zhipu: ''
+                });
+                setSelectedResponse(null);
+                
+                // 跳转回Step 1
+                setCurrentStep(1);
             } else {
                 console.error('数据保存失败:', result.error);
                 alert('保存失败: ' + result.error);
@@ -120,10 +131,9 @@ export const Generation = () => {
     // 修改API调用方法，通过后端代理
     const callDeepSeekAPI = async (text) => {
         try {
-
             const apiUrl = process.env.NODE_ENV === 'production' 
                     ? '/api/generate-emotion'  // 生产环境使用相对路径
-                    : 'http://localhost:5000/api/emotions';  // 开发环境使用完整URL
+                    : 'http://localhost:5000/api/generate-emotion';  // 开发环境使用正确的API端点
             const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: {
@@ -148,7 +158,7 @@ export const Generation = () => {
         try {
             const apiUrl = process.env.NODE_ENV === 'production' 
                     ? '/api/generate-emotion'  // 生产环境使用相对路径
-                    : 'http://localhost:5000/api/emotions';  // 开发环境使用完整URL
+                    : 'http://localhost:5000/api/generate-emotion';  // 开发环境使用正确的API端点
             const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: {
@@ -172,7 +182,7 @@ export const Generation = () => {
         try {
             const apiUrl = process.env.NODE_ENV === 'production' 
                     ? '/api/generate-emotion'  // 生产环境使用相对路径
-                    : 'http://localhost:5000/api/emotions';  // 开发环境使用完整URL
+                    : 'http://localhost:5000/api/generate-emotion';  // 开发环境使用正确的API端点
             const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: {
