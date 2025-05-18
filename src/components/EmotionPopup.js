@@ -8,6 +8,9 @@ import './EmotionPopup.css';
 const EmotionPopup = ({ emotion, onClose }) => {
     if (!emotion) return null;
     
+    // 添加调试代码
+    console.log('弹窗数据:', emotion);
+    
     return (
         <AnimatePresence>
             <motion.div 
@@ -42,7 +45,7 @@ const EmotionPopup = ({ emotion, onClose }) => {
 
                                 {/* 这个地方的context要换成具体的数据，我不清楚field在哪里 */}
                                 <h4>创作释义</h4>
-                                <p>{emotion.context}</p> 
+                                <p>{emotion.explain}</p> 
 
                                 <h4>情绪维度</h4>
                                 <div className="emotion-analysis">
@@ -80,4 +83,4 @@ const EmotionPopup = ({ emotion, onClose }) => {
     );
 };
 
-export default EmotionPopup; 
+export default EmotionPopup;

@@ -73,7 +73,8 @@ export const Generation = () => {
                 complexity: positionModes[2].join(','),
                 granularity: positionModes[3].join(','),
                 wordFrequency: JSON.stringify(wordFrequency),
-                createdAt: new Date().toISOString()
+                createdAt: new Date().toISOString(),
+                explain: extractExplain(aiResponses[selectedResponse])
             };
             
             console.log('准备保存的数据:', dataToSave);
@@ -81,7 +82,7 @@ export const Generation = () => {
             // 发送数据到后端API
             const apiUrl = process.env.NODE_ENV === 'production' 
                     ? '/api/save-emotion'  // 生产环境使用相对路径
-                    : 'http://localhost:5000/api/emotions';  // 开发环境使用完整URL
+                    : 'http://localhost:5000/api/save-emotion';  // 开发环境使用完整URL
             const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: {
@@ -139,6 +140,7 @@ export const Generation = () => {
             });
             
             const data = await response.json();
+            console.log(data.result);
             return data.result;
         } catch (error) {
             console.error('DeepSeek API调用出错:', error);
@@ -164,6 +166,7 @@ export const Generation = () => {
             });
             
             const data = await response.json();
+            console.log(data.result);
             return data.result;
         } catch (error) {
             console.error('豆包API调用出错:', error);
@@ -188,6 +191,7 @@ export const Generation = () => {
             });
             
             const data = await response.json();
+            console.log(data.result);
             return data.result;
         } catch (error) {
             console.error('智谱API调用出错:', error);
@@ -259,6 +263,19 @@ export const Generation = () => {
         const subStr = response.substring(18);
         const dunhaoIndex = subStr.indexOf('、');
         return response.substring(18, 18 + dunhaoIndex);
+    };
+
+    // 提取解释内容的函数
+    const extractExplain = (response) => {
+        if (!response) return '';
+        
+        // 尝试匹配"解释："后面的所有内容
+        const match = response.match(/解释[：:]\s*([\s\S]+)/);
+        if (match && match[1]) {
+            return match[1].trim();
+        }
+        
+        return ''; // 如果没有找到解释，返回空字符串
     };
 
     const PreDB_single = (response) => {
@@ -424,6 +441,9 @@ export const Generation = () => {
                                         </div>
                                     ))}
                                 </div>
+                                <div className="explanation-text">
+                                    {extractExplain(aiResponses.deepseek)}
+                                </div>
                                 <div className="circle-selector">
                                     {selectedResponse === 'deepseek' ? 
                                         <FontAwesomeIcon icon={faCheck} style={{color: "#e84e50"}} /> : 
@@ -443,6 +463,9 @@ export const Generation = () => {
                                             <div className="diagonal-2"></div>
                                         </div>
                                     ))}
+                                </div>
+                                <div className="explanation-text">
+                                    {extractExplain(aiResponses.douBao)}
                                 </div>
                                 <div className="circle-selector">
                                     {selectedResponse === 'douBao' ? 
@@ -464,6 +487,9 @@ export const Generation = () => {
                                         </div>
                                     ))}
                                 </div>
+                                <div className="explanation-text">
+                                    {extractExplain(aiResponses.zhipu)}
+                                </div>
                                 <div className="circle-selector">
                                     {selectedResponse === 'zhipu' ? 
                                         <FontAwesomeIcon icon={faCheck} style={{color: "#e84e50"}} /> : 
@@ -471,13 +497,22 @@ export const Generation = () => {
                                 </div>
                             </div>
                         </div>
-                        <button 
-                            className="next-button btn-primary" 
-                            onClick={handleNextStep}
-                                disabled={!selectedResponse} // 如果没有选择，禁用下一步按钮
-                        >
-                            → 保存进情绪词典
-                        </button>
+                        <div className="button-group">
+                            <button 
+                                className="next-button btn-secondary" 
+                                onClick={generateEmotionWord}
+                                disabled={loading}
+                            >
+                                {loading ? '生成中...' : '↻ 重新生成'}
+                            </button>
+                            <button 
+                                className="next-button btn-primary" 
+                                onClick={handleNextStep}
+                                disabled={!selectedResponse || loading} 
+                            >
+                                → 保存进情绪词典
+                            </button>
+                        </div>
                     </div>
                 )}
 

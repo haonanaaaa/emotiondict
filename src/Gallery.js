@@ -46,7 +46,8 @@ export const Gallery = () => {
                     complexity: parseInt(item.complexity?.split(',')[0] || 0),
                     wordcloud: Object.keys(JSON.parse(item.wordFrequency || '{}')),
                     context: item.scene || '无描述',
-                    createdAt: item.createdAt || new Date().toISOString()
+                    createdAt: item.createdAt || new Date().toISOString(),
+                    explain: item.explain || '无描述',
                 }));
                 
                 setEmotions(formattedData);

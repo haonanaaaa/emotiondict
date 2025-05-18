@@ -41,7 +41,8 @@ async function initializeDatabase() {
         complexity TEXT,
         granularity TEXT,
         wordFrequency TEXT,
-        createdAt TEXT NOT NULL
+        createdAt TEXT NOT NULL,
+        explain TEXT
       )
     `);
     
@@ -61,7 +62,7 @@ const prompt = `
 2.概括用户情绪，找出所有贴切的中文情绪描述词汇或诗句，要求：
 含诗句、用'、'连接
 3.创造1个能描述该情绪的新词：
-声韵和谐、常用字组合
+声韵和谐、常用字组合、2到3个字
 4.解释为什么选用这几个字组成创造的新词，要求：
 30字以内
 按照以下格式输出，不要输出其他内容：
@@ -116,7 +117,8 @@ app.post('/api/save-emotion', async (req, res) => {
       complexity,
       granularity,
       wordFrequency,
-      createdAt
+      createdAt,
+      explain
     } = req.body;
     
     // 插入数据
@@ -124,12 +126,12 @@ app.post('/api/save-emotion', async (req, res) => {
       `INSERT INTO emotion_entries (
         scene, selectedProvider, selectedWord, selectedPinyin,
         valence, intensity, complexity, granularity,
-        wordFrequency, createdAt
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        wordFrequency, createdAt, explain
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         scene, selectedProvider, selectedWord, selectedPinyin,
         valence, intensity, complexity, granularity,
-        wordFrequency, createdAt
+        wordFrequency, createdAt, explain
       ]
     );
     

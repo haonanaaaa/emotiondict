@@ -103,3 +103,24 @@ code {
     background-color: var(--text-light);
     cursor: not-allowed;
 }
+
+.btn-secondary {
+  text-decoration: none;
+  background-color: #000;
+  color: var(--secondary-color);
+  border: none;
+  padding: 18px 40px;
+  font-size: var(--font-xs);
+  cursor: pointer;
+  border-radius: 36px;
+  transition: background-color 0.3s;
+}
+
+.btn-secondary:hover {
+  background-color: var(--text-color);
+} 
+
+.btn-secondary:disabled {
+    background-color: var(--text-light);
+    cursor: not-allowed;
+}
