@@ -78,14 +78,18 @@
     }
 
     .navbar-title h1 {
+        width: 100%;
         font-size: 24px;
     }
-
-    .navbar-subtitle {
-        font-size: 14px;
+    .navbar-title span {
+        display: none;
     }
 
     .navbar-links {
+        width: 100px;
         gap: 20px;
+    }
+    .navbar-link.active::after {
+        left: -4px;
     }
 } 

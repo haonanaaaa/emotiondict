@@ -163,55 +163,6 @@
   }
 }
 
-/* .splash {
-  position: absolute;
-  top: 10%;
-  bottom: 50%;
-  left: 35%;
-  right: 35%;
-  border-radius: 8px;
-  clip-path: polygon(
-
-  );
-  background-color: black;
-  transform-origin: center;
-  animation-name: splash;
-  animation-duration: var(--duration);
-  animation-delay: var(--delay);
-  animation-iteration-count: infinite;
-  animation-timing-function: ease-out;
-  animation-fill-mode: backwards;
-  box-shadow: 0 0 12px rgba(0,0,0, 0.6);
-  opacity: 0.8;
-} */
-
-@keyframes splash {
-  0% {
-    transform: scale(0.1, 0.1) rotate(-15deg);
-    opacity: 0;
-  }
-  49% {
-    transform: scale(0.1, 0.1) rotate(-15deg);
-    opacity: 0;
-  }
-  50% {
-    transform: scale(0.2, 0.2) rotate(-15deg);
-    opacity: 0.8;
-  }
-  60% {
-    transform: scale(0.8, 0.8) rotate(0deg);
-    opacity: 0.8;
-  }
-  90% {
-    transform: scale(1, 1) rotate(15deg);
-    opacity: 0.6;
-  }
-  100% {
-    transform: scale(1.2, 1.2) rotate(15deg);
-    opacity: 0;
-  }
-}
-
 .particles > div {
   position: absolute;
   border-radius: 100%;

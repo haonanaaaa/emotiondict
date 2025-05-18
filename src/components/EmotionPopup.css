@@ -1,0 +1,184 @@
+/* 弹出层样式 */
+.emotion-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--background-overlay, rgba(0, 0, 0, 0.7));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.emotion-popup-content {
+    background-color: var(--secondary-color, white);
+    width: 90%;
+    max-width: 1200px;
+    max-height: 90vh;
+    position: relative;
+    overflow: hidden;
+    border: 2px solid var(--primary-color, #0000ff);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.popup-close-button {
+    position: absolute;
+    top: var(--spacing-md, 15px);
+    right: var(--spacing-md, 15px);
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;
+    font-size: var(--font-sm, 1rem);
+    transition: background-color 0.2s;
+}
+
+.popup-close-button:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.popup-container {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    gap: var(--spacing-lg, 30px);
+}
+
+.popup-left {
+    flex: 1;
+    padding: var(--spacing-lg, 20px);
+    max-width: 320px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.popup-right {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.emotion-header {
+    margin-bottom: var(--spacing-lg, 30px);
+}
+
+.emotion-pinyin {
+    font-family: 'Cormorant Garamond';
+    font-size: var(--font-md, 1rem);
+    margin-bottom: var(--spacing-xs, 5px);
+    color: var(--text-light, #666);
+}
+
+.emotion-name {
+    font-family: 'songti';
+    font-size: var(--font-xl, 3rem);
+    font-weight: 700;
+    margin-bottom: var(--spacing-md, 15px);
+}
+
+.emotion-story {
+    font-size: var(--font-xs, 1rem);
+    line-height: 1.6;
+    color: var(--text-lighter, #333);
+    margin-bottom: var(--spacing-lg);
+}
+
+h4 {
+    margin-top: var(--spacing-lg);
+    color: var(--text-light);
+    font-size: var(--font-xs);
+    letter-spacing: 0.1em;
+}
+
+.emotion-story h4 + p {
+    font-family: 'kai';
+}
+
+.emotion-story h4::before {
+    content: '🡕';
+    color: var(--primary-color);
+    margin-right: var(--spacing-xs);
+}
+
+.emotion-story p {
+    line-height: 1.8;
+    color: var(--text-light);
+}
+
+.emotion-analysis {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-sm, 15px);
+    margin-top: var(--spacing-md, 15px);
+}
+
+.analysis-item {
+    display: flex;
+    flex-direction: column;
+    padding: var(--spacing-sm, 10px);
+    border-radius: var(--border-radius, 5px);
+    background-color: var(--background-light, #f5f5f5);
+    position: relative;
+    overflow: hidden;
+}
+
+.analysis-icon {
+    position: absolute;
+    right: 0.5em;
+    top: 50%;
+    transform: translateY(-50%);
+    max-width: 40%;
+    height: 70%;
+    opacity: 0.05;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.analysis-label {
+    font-family: 'Kai';
+    font-size: var(--font-xs);
+    color: var(--text-light);
+    margin-bottom: var(--spacing-xs, 5px);
+    font-weight: 500;
+    position: relative;
+    z-index: 1;
+}
+
+.analysis-value {
+    font-size: var(--font-xs);
+    font-weight: bold;
+    color: var(--text-color, #333);
+    position: relative;
+    z-index: 1;
+}
+
+/* 响应式布局 */
+@media (max-width: 900px) {
+    .emotion-story {
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .popup-container {
+        flex-direction: column;
+    }
+
+    .emotion-popup-content {
+        width: 95%;
+    }
+
+    .popup-left {
+        padding: var(--spacing-md, 15px);
+        max-width: none;
+    }
+    .popup-right {
+        display: none;
+    }
+} 

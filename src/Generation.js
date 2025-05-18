@@ -31,13 +31,6 @@ export const Generation = () => {
         }
     };
 
-    // 添加测试加载动画的函数
-    const testLoadingAnimation = () => {
-        setTestLoading(true);
-        setTimeout(() => {
-            setTestLoading(false);
-        }, 5000); // 5秒后关闭动画
-    };
 
     const handleNextStep = () => {
         if (currentStep < 4) {
@@ -394,20 +387,12 @@ export const Generation = () => {
                                 <div className="character-count">{characterCount}/{maxCharacters}字</div>
                             </div>
                             <button 
-                                className="next-button"
+                                className="next-button btn-primary"
                                 onClick={generateEmotionWord}
                                 disabled={loading}
                             >
                                 {loading ? '生成中...' : '→ 生成我的情绪词汇'}
                             </button>
-                            {/* 添加测试按钮 */}
-                            {/* <button 
-                                className="test-button"
-                                onClick={testLoadingAnimation}
-                                style={{ marginTop: '10px', backgroundColor: '#888', color: 'white', padding: '8px 16px', borderRadius: '4px', cursor: 'pointer' }}
-                            >
-                                测试下雨动画效果
-                            </button> */}
                         </>
                     )}
 
@@ -477,7 +462,7 @@ export const Generation = () => {
                             </div>
                         </div>
                         <button 
-                            className="next-button" 
+                            className="next-button btn-primary" 
                             onClick={handleNextStep}
                                 disabled={!selectedResponse} // 如果没有选择，禁用下一步按钮
                         >
