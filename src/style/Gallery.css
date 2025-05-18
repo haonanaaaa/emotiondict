@@ -175,9 +175,8 @@
   .intro-section {
     flex-direction: column;
   }
-  
-  .quote-box {
-    margin-top: 30px;
+  .intro-text {
+    margin: -40px auto 40px;
   }
 
   .characters-grid {

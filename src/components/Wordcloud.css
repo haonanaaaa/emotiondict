@@ -55,3 +55,9 @@ color: #323232;
 .wordcloud-word.color[data-potency="3"]:hover {
   background-color: rgba(0, 0, 255, 0.2);
 }
+
+@media (max-width: 900px) {
+  .wordcloud-container {
+    display: none;
+  }
+}
