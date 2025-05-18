@@ -1,9 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap');
 .generation-container {
-    /* max-width: 1200px;
-    margin: 0 auto; */
-    /* padding: 20px; */
-    font-family: 'Arial', sans-serif;
     max-width: 1440px;
     height: 100%;
     margin: 0 auto;
@@ -48,10 +44,6 @@
     color: var(--text-light);
 }
 
-@font-face {
-    font-family: 'Noto Serif SC';
-    src: url('../assets/font/NotoSerif-VariableFont_wdth\,wght.ttf')
-}
 .step-title {
     margin-bottom: 15px;
     position: relative;
@@ -67,21 +59,6 @@
     color: inherit; 
     font-family: 'noto-serif-sc';
 } */
-
-.step-number::before {
-    content: '';
-    position: absolute;
-    width: 12px;
-    height: 12px;
-    background-color: #ff0000;
-    border-radius: 50%;
-    bottom: -20px;
-    left: 91%;
-    top: 10%;
-    transform: translateX(-50%);
-    /* transition: opacity 0.3s; */
-    opacity: 0.5;
-}
 
 .step.active .step-number::after {
     opacity: 1;
@@ -113,7 +90,7 @@
 }
 
 .input-box {
-    border: 2px solid #ff0000;
+    border: 2px solid var(--primary-color);
     /* border-radius: 10px; */
     padding: 20px;
     margin-bottom: 20px;
@@ -122,26 +99,23 @@
 }
 
 .emotion-input {
-    font-size: var(--font-lg);
-    /* font-family: 'Noto Serif SC'; */
     font-family: 'songti';
+    font-size: 28px;
     width: 100%;
     height: 90%;
     border: none;
     resize: none;
-    font-size: 16px;
-    line-height: 2.5; /* 增加行高，为横线留出空间 */
+    line-height: 2; /* 增加行高，为横线留出空间 */
     outline: none;
-    background-image: linear-gradient(transparent calc(100% - 1px), #E84E50 calc(100% - 0.5px));
-    background-size: 100% 2.5em; /* 与行高匹配 */
+    background-image: linear-gradient(transparent calc(100% - 1px), var(--primary-color) calc(100% - 0.5px));
+    background-size: 100% 2em; /* 与行高匹配 */
     background-origin: content-box;
     padding: 0;
-    text-indent: 0;
 }
 
 /* 可以移除或修改input-box的边框样式，让它更符合横线本的外观 */
 .input-box {
-    border: 2px solid #E84E50; /* 更改为更轻的边框 */
+    border: 2px solid var(--primary-color); /* 更改为更轻的边框 */
     padding: 20px;
     margin-bottom: 20px;
     position: relative;
@@ -159,20 +133,6 @@
 
 .next-button {
     align-self: flex-end;
-    background-color: #000;
-    color: #fff;
-    border: none;
-    border-radius: 20px;
-    padding: 10px 20px;
-    font-size: 14px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    transition: background-color 0.3s;
-}
-
-.next-button:hover {
-    background-color: #333;
 }
 
 .result-container {
@@ -206,19 +166,19 @@
 
 /* 当鼠标悬停在api-response上时，改变字体和边框颜色 */
 .api-response:hover .character-grid {
-    border-color: #E84E50;
+    border-color: var(--primary-color);
 }
 
 .api-response:hover .character-grid::before,
 .api-response:hover .character-grid::after,
 .api-response:hover .diagonal-1,
 .api-response:hover .diagonal-2 {
-    border-color: #E84E50;
+    border-color: var(--primary-color);
 }
 
 /* 当鼠标悬停在api-response上时，改变圆圈颜色 */
 .api-response:hover .circle-selector {
-    color: #E84E50;
+    color: var(--primary-color);
 }
 
 /* 圆圈选择器样式 */
@@ -354,27 +314,6 @@
     font-size: 16px;
 }
 
-.submit-button {
-    background-color: #000;
-    color: #fff;
-    border: none;
-    border-radius: 20px;
-    padding: 10px 20px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.submit-button:hover {
-    background-color: #333;
-}
-
-/* 禁用状态的按钮样式 */
-.next-button:disabled {
-    background-color: #999;
-    cursor: not-allowed;
-}
-
 /* 响应式设计 */
 @media (max-width: 1024px) {
     .generation-container {
@@ -385,6 +324,9 @@
 }
 
 @media (max-width: 768px) {
+    .generation-container {
+        padding: 100px 0;
+    }
     .generation-content {
         flex-direction: column;
     }
@@ -392,47 +334,21 @@
     .steps-container, .input-container {
         width: 100%;
     }
+
+    .steps {
+        margin-bottom: -120px;
+    }
+
+    .step {
+        margin-bottom: 0.5em;
+    }
     
     .emotion-input {
         min-height: 250px;
+        font-size: var(--font-sm);
     }
     
     .api-responses {
         gap: 15px;
-    }
-}
-
-@media (max-width: 480px) {
-    .generation-container {
-        padding: 20px;
-    }
-    
-        .step-number {
-            font-size: 14px;
-        }
-        
-        .step-title {
-            font-size: 16px;
-        }
-        
-        .emotion-input {
-            font-size: var(--font-md);
-            min-height: 200px;
-        }
-        
-        .api-response {
-            padding: 10px;
-        }
-    /* 添加圆圈选择器样式 */
-    .circle-selector {
-        /* margin-top: 15px; */
-        font-size: 48px;
-        color: black;
-        cursor: pointer;
-        text-align: center;
-    }
-
-    .circle-selector:hover {
-        color: #E84E50;
     }
 }
