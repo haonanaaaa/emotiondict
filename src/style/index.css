@@ -71,6 +71,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-image: url('../assets/svg/background.svg');
+  background-size: cover;
 }
 
 code {
@@ -102,4 +103,3 @@ code {
     background-color: var(--text-light);
     cursor: not-allowed;
 }
-
