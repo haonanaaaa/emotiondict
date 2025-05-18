@@ -147,7 +147,15 @@ app.post('/api/save-emotion', async (req, res) => {
 // 获取所有情绪词汇的API
 app.get('/api/emotions', async (req, res) => {
   try {
+    console.log('收到获取情绪词汇请求');
     const emotions = await db.all('SELECT * FROM emotion_entries ORDER BY createdAt DESC');
+    console.log(`查询到 ${emotions.length} 条情绪词汇记录`);
+    
+    // 记录第一条数据的结构（如果有）
+    if (emotions.length > 0) {
+      console.log('第一条数据示例:', JSON.stringify(emotions[0], null, 2));
+    }
+    
     res.json(emotions);
   } catch (error) {
     console.error('获取情绪词汇失败:', error);
