@@ -23,7 +23,12 @@ export const Gallery = () => {
         const fetchEmotions = async () => {
             try {
                 setLoading(true);
-                const response = await fetch('http://localhost:5001/api/emotions');
+                // 根据环境选择API地址
+                const apiUrl = process.env.NODE_ENV === 'production' 
+                    ? '/api/emotions'  // 生产环境使用相对路径
+                    : 'http://localhost:5000/api/emotions';  // 开发环境使用完整URL
+                    
+                const response = await fetch(apiUrl);
                 
                 if (!response.ok) {
                     throw new Error(`获取数据失败: ${response.status}`);
