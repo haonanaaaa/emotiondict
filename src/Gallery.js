@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import './style/Gallery.css';
 
 import Wordcloud from './components/Wordcloud';
 import SortControls from './components/SortControls';
+import EmotionPopup from './components/EmotionPopup';
 
 // 情感粒度的核心是主观情绪体验的细致性，可以根据用户输入的文本长度来判断
 import { Navbar } from './NavBar';
@@ -122,18 +121,23 @@ export const Gallery = () => {
 
     // 根据complexity计算翻转效果
     const getFlipTransform = (complexity, isFirstChar) => {
-        switch(complexity) {
-            case 2:
-                return isFirstChar ? 'scaleX(-1)' : 'none';
-            case 3:
-                return 'scaleX(-1)';
-            case 4:
-                return isFirstChar ? 'scaleY(-1)' : 'none';
-            case 5:
-                return 'scaleY(-1)';
-            default:
-                return 'none';
+        // 返回具体的 transform 值而不是空字符串
+        let transform = 'scale(1, 1)';
+        
+        if (complexity === 2 && isFirstChar) {
+            transform = 'scaleX(-1)';
+        } else if (complexity === 3) {
+            transform = 'scaleX(-1)';
+        } else if (complexity === 4 && isFirstChar) {
+            transform = 'scaleY(-1)';
+        } else if (complexity === 5) {
+            transform = 'scaleY(-1)';
         }
+        
+        return {
+            initial: transform,
+            hover: 'scale(1, 1)'  // 明确指定正常状态的 transform
+        };
     };
 
     // 根据granularity计算模糊效果
@@ -193,44 +197,90 @@ export const Gallery = () => {
                                     animate={{ 
                                         opacity: 1, 
                                         scale: 1,
-                                        transition: { delay: 0.1 * Math.random() } // 添加随机延迟，使动画更自然
+                                        transition: { delay: 0.1 * Math.random() }
                                     }}
                                     initial={{ opacity: 0, scale: 0.8 }}
                                     exit={{ opacity: 0, scale: 0.8 }}
+                                    variants={{
+                                        hover: {
+                                            y: -5,
+                                            backgroundColor: 'var(--background-light)',
+                                            transition: { duration: 10 } // 增加过渡时间
+                                        }
+                                    }}
+                                    whileHover="hover"
                                 >
-                                    {[...emotion.name].map((char, charIndex) => (
-                                        <div key={charIndex} className="character-cell">
-                                            <motion.div 
-                                                className="character-text"
-                                                style={{ 
-                                                    color: getTextColor(emotion.intensity),
-                                                    transform: getFlipTransform(emotion.complexity, charIndex === 0),
-                                                    filter: getBlurEffect(emotion.granularity)
-                                                }}
-                                                initial={{ opacity: 0, y: 10 }}
-                                                animate={{ opacity: 1, y: 0 }}
-                                                transition={{ delay: 0.05 * charIndex, duration: 0.3 }}
-                                            >{char}</motion.div>
-                                            <div className="character-background">
-                                                <div 
-                                                    className="background-line horizontal-line"
-                                                    style={{ borderColor: emotion.potency > 3 ? 'var(--primary-color)' : '#0000ff' }}
-                                                ></div>
-                                                <div 
-                                                    className="background-line vertical-line"
-                                                    style={{ borderColor: emotion.potency > 3 ? 'var(--primary-color)' : '#0000ff' }}
-                                                ></div>
-                                                <div 
-                                                    className="background-line diagonal-line diagonal-line-1"
-                                                    style={{ borderColor: emotion.potency > 3 ? 'var(--primary-color)' : '#0000ff' }}
-                                                ></div>
-                                                <div 
-                                                    className="background-line diagonal-line diagonal-line-2"
-                                                    style={{ borderColor: emotion.potency > 3 ? 'var(--primary-color)' : '#0000ff' }}
-                                                ></div>
+                                    {[...emotion.name].map((char, charIndex) => {
+                                        const charId = `emotion-${emotion.id}-char-${charIndex}`;
+                                        const flipTransform = getFlipTransform(emotion.complexity, charIndex === 0);
+                                        
+                                        return (
+                                            <div key={charIndex} className="character-cell">
+                                                <motion.div 
+                                                    className="character-text"
+                                                    style={{ 
+                                                        color: getTextColor(emotion.intensity),
+                                                        filter: getBlurEffect(emotion.granularity),
+                                                        transformOrigin: 'center'
+                                                    }}
+                                                    initial={{ 
+                                                        opacity: 0, 
+                                                        y: 10,
+                                                        transform: flipTransform.initial
+                                                    }}
+                                                    animate={{ 
+                                                        opacity: 1, 
+                                                        y: 0,
+                                                        transform: flipTransform.initial
+                                                    }}
+                                                    transition={{ 
+                                                        opacity: { delay: 0.05 * charIndex, duration: 0.3 },
+                                                        y: { delay: 0.05 * charIndex, duration: 0.3 },
+                                                        transform: { duration: 0.5 }
+                                                    }}
+                                                    variants={{
+                                                        hover: { 
+                                                            transform: flipTransform.hover,
+                                                            color: 'var(--text-color)',
+                                                            filter: 'none',
+                                                            transition: { 
+                                                                transform: {
+                                                                    duration: 0.6,
+                                                                    ease: [0.43, 0.13, 0.23, 0.96]
+                                                                },
+                                                                color: {
+                                                                    duration: 0.4,
+                                                                    ease: "easeOut"
+                                                                },
+                                                                filter: {
+                                                                    duration: 0.5,
+                                                                    ease: "easeOut"
+                                                                }
+                                                            }
+                                                        }
+                                                    }}
+                                                >{char}</motion.div>
+                                                <div className="character-background">
+                                                    <div 
+                                                        className="background-line horizontal-line"
+                                                        style={{ borderColor: emotion.potency > 3 ? 'var(--primary-color)' : '#0000ff' }}
+                                                    ></div>
+                                                    <div 
+                                                        className="background-line vertical-line"
+                                                        style={{ borderColor: emotion.potency > 3 ? 'var(--primary-color)' : '#0000ff' }}
+                                                    ></div>
+                                                    <div 
+                                                        className="background-line diagonal-line diagonal-line-1"
+                                                        style={{ borderColor: emotion.potency > 3 ? 'var(--primary-color)' : '#0000ff' }}
+                                                    ></div>
+                                                    <div 
+                                                        className="background-line diagonal-line diagonal-line-2"
+                                                        style={{ borderColor: emotion.potency > 3 ? 'var(--primary-color)' : '#0000ff' }}
+                                                    ></div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    ))}
+                                        );
+                                    })}
                                 </motion.div>
                             );
                         })}
@@ -238,69 +288,7 @@ export const Gallery = () => {
                 </div>
             </LayoutGroup>
             
-            <AnimatePresence>
-                {selectedEmotion && (
-                    <motion.div 
-                        className="emotion-popup-overlay"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        onClick={closePopup}
-                    >
-                        <motion.div 
-                            className="emotion-popup-content"
-                            onClick={(e) => e.stopPropagation()}
-                            initial={{ scale: 0.9, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            exit={{ scale: 0.9, opacity: 0 }}
-                            transition={{ duration: 0.3 }}
-                            style={{ borderColor: selectedEmotion.potency > 3 ? 'var(--primary-color)' : '#0000ff' }}
-                        >
-                            <div className="popup-close-button" onClick={closePopup}>
-                                <FontAwesomeIcon icon={faTimes} />
-                            </div>
-                            
-                            <div className="popup-container">
-                                <div className="popup-left">
-                                    <div className="emotion-header">
-                                        <div className="emotion-pinyin">{selectedEmotion.pinyin}</div>
-                                        <div className="emotion-name">{selectedEmotion.name}</div>
-                                    </div>
-                                    
-                                    <div className="emotion-story">
-                                        <p>{selectedEmotion.context}</p>
-
-                                        <h4>情绪维度</h4>
-                                        <div className="emotion-analysis">
-                                            <div className="analysis-item">
-                                                <span className="analysis-label">粒度 Granularity</span>
-                                                <span className="analysis-value">{selectedEmotion.granularity}</span>
-                                            </div>
-                                            <div className="analysis-item">
-                                                <span className="analysis-label">效价 Potency</span>
-                                                <span className="analysis-value">{selectedEmotion.potency>3?'积极':'消极'}</span>
-                                            </div>
-                                            <div className="analysis-item">
-                                                <span className="analysis-label">强度 Intensity</span>
-                                                <span className="analysis-value">{selectedEmotion.intensity}</span>
-                                            </div>
-                                            <div className="analysis-item">
-                                                <span className="analysis-label">复杂度 Complexity</span>
-                                                <span className="analysis-value">{selectedEmotion.complexity}</span>
-                                            </div>
-                                        </div>
-                                        
-                                    </div>
-                                </div>
-                                
-                                <div className="popup-right">
-                                    <Wordcloud words={selectedEmotion.wordcloud} potency={selectedEmotion.potency} />
-                                </div>
-                            </div>
-                        </motion.div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+            <EmotionPopup emotion={selectedEmotion} onClose={closePopup} />
             
             <footer className="footer-section">
                 <p>2025 Unnamed Emotion Dictionary.</p>

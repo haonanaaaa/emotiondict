@@ -60,7 +60,6 @@
   margin: var(--spacing-xl) auto;
   padding: 0 var(--spacing-md);
   min-height: 500px; /* 确保网格有固定最小高度，防止排序时闪烁 */
-  position: relative; /* 为绝对定位的子元素提供参考 */
   will-change: transform, opacity; /* 优化动画性能 */
 }
 
@@ -71,32 +70,15 @@
   border: 1px solid var(--border-color);
   width: 120px;
   box-sizing: border-box;
-  transition: all 0.5s ease-in-out;
+  /* 只保留与framer-motion不冲突的属性过渡 */
+  transition: border-color 0.5s ease-in-out;
   will-change: transform, opacity; /* 优化动画性能 */
   transform-origin: center; /* 设置变换的原点为中心 */
 }
 
-.word-container:hover {
-  transform: translateY(var(--spacing-xs));
-  background-color: var(--background-light);
-  transition: background-color 0.3s ease;
-}
-
-.word-container:hover .character-text {
-  color: var(--text-color) !important;
-  transform: none !important;
-  filter: none !important;
-}
-
-.word-container:active .character-text {
-  color: var(--text-color) !important;
-  transform: none !important;
-  filter: none !important;
-}
-
 .character-cell {
   width: 100%;
-  height: 120px;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -116,7 +98,15 @@
 
 .character-text {
   z-index: 2;
-  /* filter: blur(2px); */
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  line-height: 1;
 }
 
 .character-background {
@@ -167,119 +157,6 @@
   transform-origin: center;
 }
 
-/* 情绪弹窗样式 */
-.emotion-popup-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: var(--background-overlay);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.emotion-popup-content {
-  background-color: var(--secondary-color);
-  width: 90%;
-  max-width: 1200px;
-  max-height: 90vh;
-  position: relative;
-  overflow: hidden;
-  border: 2px solid var(--primary-color);
-}
-
-.popup-close-button {
-  position: absolute;
-  top: var(--spacing-md);
-  right: var(--spacing-md);
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgba(255, 255, 255, 0.9);
-  border-radius: 50%;
-  cursor: pointer;
-  z-index: 10;
-  font-size: var(--font-sm);
-}
-
-.popup-container {
-  display: flex;
-  height: 100%;
-}
-
-.popup-left {
-  flex: 1;
-  padding: var(--spacing-lg);
-  max-width: 320px;
-  max-height: 90vh;
-  overflow-y: auto;
-}
-
-.popup-right {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.emotion-pinyin {
-  font-family: 'Cormorant Garamond';
-  font-size: var(--font-md);
-  margin-bottom: var(--spacing-xs);
-  color: var(--text-light);
-}
-
-.emotion-name {
-  font-family: 'songti';
-  font-size: var(--font-xl);
-  font-weight: 700;
-  margin-bottom: var(--spacing-md);
-}
-
-.emotion-story {
-  font-size: var(--font-xs);
-  margin-bottom: var(--spacing-lg);
-}
-
-.emotion-story h4 {
-  margin-bottom: 15px;
-  color: var(--text-color);
-  font-weight: 600;
-}
-
-.emotion-story p {
-  line-height: 1.8;
-  color: var(--text-lighter);
-}
-
-.emotion-analysis {
-  background-color: var(--background-light);
-  padding: var(--spacing-md);
-  border-radius: var(--border-radius);
-  margin-bottom: var(--spacing-lg);
-}
-
-.analysis-item {
-  margin-bottom: var(--spacing-sm);
-  display: flex;
-  justify-content: space-between;
-}
-
-.analysis-label {
-  font-weight: 500;
-  color: var(--text-light);
-}
-
-.analysis-value {
-  font-weight: 600;
-  color: var(--text-color);
-}
-
 /* 页脚样式 */
 .footer-section {
   text-align: center;
@@ -303,14 +180,6 @@
     margin-top: 30px;
   }
 
-  .popup-container {
-    flex-direction: column;
-  }
-
-  .popup-right {
-    height: 200px;
-  }
-
   .characters-grid {
     grid-template-columns: repeat(4, 120px);
     gap: var(--spacing-lg);
@@ -318,18 +187,6 @@
 }
 
 @media (max-width: 600px) {
-  .emotion-popup-content {
-    width: 95%;
-  }
-
-  .popup-left {
-    padding: var(--spacing-md);
-  }
-
-  .emotion-name {
-    font-size: var(--font-lg);
-  }
-
   .characters-grid {
     grid-template-columns: repeat(2, 120px);
     gap: var(--spacing-md);
