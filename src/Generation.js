@@ -674,6 +674,12 @@ export const Generation = () => {
                         <div className="button-group">
                             <button 
                                 className="next-button btn-secondary" 
+                                onClick={() => setCurrentStep(1)}
+                            >
+                                ← 修改输入
+                            </button>
+                            <button 
+                                className="next-button btn-secondary" 
                                 onClick={generateEmotionWord}
                                 disabled={loading}
                             >
