@@ -10,23 +10,83 @@ import './style/Generation.css';
 import LoadingAnimation from './components/LoadingAnimation';
 
 export const Generation = () => {
-    const [currentStep, setCurrentStep] = useState(1);
-    const [inputText, setInputText] = useState('');
-    const [aiResponses, setAiResponses] = useState({
+    // const [currentStep, setCurrentStep] = useState(1);
+    // const [inputText, setInputText] = useState('');
+    // const [aiResponses, setAiResponses] = useState({
+    //     deepseek: '',
+    //     douBao: '',
+    //     zhipu: ''
+    // });
+    const savedState = JSON.parse(localStorage.getItem('generationState')) || {};
+    const [currentStep, setCurrentStep] = useState(savedState.currentStep || 1);
+    const [inputText, setInputText] = useState(savedState.inputText || '');
+    const [aiResponses, setAiResponses] = useState(savedState.aiResponses || {
         deepseek: '',
         douBao: '',
         zhipu: ''
     });
-    const [loading, setLoading] = useState(false);
-    const [characterCount, setCharacterCount] = useState(0);
+    const [loading, setLoading] = useState(savedState.loading || false);
+    const [characterCount, setCharacterCount] = useState(savedState.inputText?.length || 0);
     const maxCharacters = 200;
     // 新增状态用于测试加载动画
     const [testLoading, setTestLoading] = useState(false);
+    const [selectedResponse, setSelectedResponse] = useState(savedState.selectedResponse || null);
+
+    // 当关键状态变化时保存到本地存储
+    useEffect(() => {
+        const stateToSave = {
+            currentStep,
+            inputText,
+            aiResponses,
+            selectedResponse,
+            loading
+        };
+        localStorage.setItem('generationState', JSON.stringify(stateToSave));
+    }, [currentStep, inputText, aiResponses, selectedResponse, loading]);
+
+    // 添加一个useEffect来处理从其他页面返回时的UI状态
+    useEffect(() => {
+        // 如果是从其他页面返回，且当前是Step 2，但API响应不完整
+        if (currentStep === 2) {
+            console.log("检测到从其他页面返回，检查API响应状态");
+        
+            // 设置加载状态
+            setLoading(true);
+            
+            // 创建一个轮询函数来检查API是否完成
+            const checkApiStatus = () => {
+                // 从localStorage获取最新状态
+                const currentState = JSON.parse(localStorage.getItem('generationState')) || {};
+                const currentResponses = currentState.aiResponses || {};
+                
+                console.log("轮询检查API状态:", currentResponses);
+                
+                // 检查是否所有API都有响应
+                if (currentResponses.deepseek && currentResponses.douBao && currentResponses.zhipu) {
+                    console.log("检测到API响应已完成");
+                    // 更新状态
+                    setAiResponses(currentResponses);
+                    setLoading(false);
+                    // API调用完成后前进到第3步
+                    setCurrentStep(3);
+                    return; // 停止轮询
+                }
+                
+                // 继续轮询
+                setTimeout(checkApiStatus, 1000); // 每秒检查一次
+            };
+            
+            // 开始轮询
+            checkApiStatus();
+        }
+    }, []);  // 仅在组件挂载时执行一次
 
     const handleInputChange = (e) => {
         const text = e.target.value;
+        console.log('1');
         if (text.length <= maxCharacters) {
             setInputText(text);
+            console.log(text);
             setCharacterCount(text.length);
         }
     };
@@ -49,6 +109,35 @@ export const Generation = () => {
             saveToDatabase();
         }
     };
+
+     // 当关键状态变化时保存到本地存储
+     useEffect(() => {
+        const stateToSave = {
+            currentStep,
+            inputText,
+            aiResponses,
+            selectedResponse,
+            loading
+        };
+        localStorage.setItem('generationState', JSON.stringify(stateToSave));
+    }, [currentStep, inputText, aiResponses, selectedResponse, loading]);
+
+    useEffect(() => {
+        // 定义页面刷新/关闭时的处理函数
+        const handleBeforeUnload = () => {
+            // 清除 localStorage 中的状态
+            localStorage.removeItem('generationState');
+        };
+        
+        // 添加事件监听器
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        
+        // 组件卸载时移除事件监听器
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, []);
+
 
     // 添加保存到数据库的函数
     const saveToDatabase = async () => {
@@ -106,6 +195,7 @@ export const Generation = () => {
                     zhipu: ''
                 });
                 setSelectedResponse(null);
+                localStorage.removeItem('generationState');
                 
                 // 跳转回Step 1
                 setCurrentStep(1);
@@ -140,7 +230,24 @@ export const Generation = () => {
             });
             
             const data = await response.json();
-            console.log(data.result);
+            console.log('DeepSeek API 返回结果:', data.result);
+            
+            // 获取当前localStorage中的状态
+            const currentState = JSON.parse(localStorage.getItem('generationState')) || {};
+            const currentResponses = currentState.aiResponses || {};
+            
+            // 清理API响应中的特殊字符
+            const cleanedResult = data.result ? data.result.replace(/[*#]/g, '') : '';
+            
+            // 更新localStorage中的aiResponses
+            localStorage.setItem('generationState', JSON.stringify({
+                ...currentState,
+                aiResponses: {
+                    ...currentResponses,
+                    deepseek: cleanedResult
+                }
+            }));
+            
             return data.result;
         } catch (error) {
             console.error('DeepSeek API调用出错:', error);
@@ -166,7 +273,24 @@ export const Generation = () => {
             });
             
             const data = await response.json();
-            console.log(data.result);
+            console.log('豆包 API 返回结果:', data.result);
+            
+            // 获取当前localStorage中的状态
+            const currentState = JSON.parse(localStorage.getItem('generationState')) || {};
+            const currentResponses = currentState.aiResponses || {};
+            
+            // 清理API响应中的特殊字符
+            const cleanedResult = data.result ? data.result.replace(/[*#]/g, '') : '';
+            
+            // 更新localStorage中的aiResponses
+            localStorage.setItem('generationState', JSON.stringify({
+                ...currentState,
+                aiResponses: {
+                    ...currentResponses,
+                    douBao: cleanedResult
+                }
+            }));
+            
             return data.result;
         } catch (error) {
             console.error('豆包API调用出错:', error);
@@ -191,7 +315,24 @@ export const Generation = () => {
             });
             
             const data = await response.json();
-            console.log(data.result);
+            console.log('智谱 API 返回结果:', data.result);
+            
+            // 获取当前localStorage中的状态
+            const currentState = JSON.parse(localStorage.getItem('generationState')) || {};
+            const currentResponses = currentState.aiResponses || {};
+            
+            // 清理API响应中的特殊字符
+            const cleanedResult = data.result ? data.result.replace(/[*#]/g, '') : '';
+            
+            // 更新localStorage中的aiResponses
+            localStorage.setItem('generationState', JSON.stringify({
+                ...currentState,
+                aiResponses: {
+                    ...currentResponses,
+                    zhipu: cleanedResult
+                }
+            }));
+            
             return data.result;
         } catch (error) {
             console.error('智谱API调用出错:', error);
@@ -229,11 +370,13 @@ export const Generation = () => {
             };
             
             // 更新响应结果，并清理特殊字符
-            setAiResponses({
+            const finalResponses = {
                 deepseek: cleanResponse(deepseekResponse),
                 douBao: cleanResponse(douBaoResponse),
                 zhipu: cleanResponse(zhipuResponse)
-            });
+            };
+            
+            setAiResponses(finalResponses);
             
             // 记录结束时间并计算总用时
             const endTime = new Date();
@@ -335,15 +478,46 @@ export const Generation = () => {
         // 合并所有数组
         const allWords = [...arr4, ...arr5, ...arr6];
 
-        // 统计词频
-        const wordFrequency = allWords.reduce((acc, word) => {
-            const noQuotes = word.replace(/['"]/g, '');
-            // 统计计数
-            acc[noQuotes] = (acc[noQuotes] || 0) + 1;
-            return acc;
-        }, {});
+        // 统计词频 - 修改为处理包含关系
+        const wordFrequency = {};
+        
+        // 首先清理所有词汇（去除引号）
+        const cleanedWords = allWords.map(word => word.replace(/['"]/g, '').trim());
+        
+        // 对每个词汇进行处理
+        cleanedWords.forEach(word => {
+            // 检查是否已经有包含当前词的键
+            let foundMatch = false;
+            
+            // 检查当前词是否是其他词的子串
+            for (const existingWord in wordFrequency) {
+                // 如果当前词包含在已有词中，或已有词包含在当前词中
+                if (existingWord.includes(word) || word.includes(existingWord)) {
+                    // 选择较短的词作为键
+                    const shorterWord = existingWord.length <= word.length ? existingWord : word;
+                    const longerWord = existingWord.length > word.length ? existingWord : word;
+                    
+                    // 如果较短的词已经是键，增加其计数
+                    if (shorterWord === existingWord) {
+                        wordFrequency[existingWord]++;
+                    } else {
+                        // 否则，创建新键并转移计数
+                        wordFrequency[shorterWord] = (wordFrequency[existingWord] || 0) + 1;
+                        delete wordFrequency[existingWord];
+                    }
+                    
+                    foundMatch = true;
+                    break;
+                }
+            }
+            
+            // 如果没有找到匹配项，创建新键
+            if (!foundMatch) {
+                wordFrequency[word] = 1;
+            }
+        });
 
-        console.log("词频统计结果:", wordFrequency);
+        console.log("改进后的词频统计结果:", wordFrequency);
 
         console.log("四个位置的众数结果:", positionModes);
         return {
@@ -360,7 +534,7 @@ export const Generation = () => {
         return pinyin(char, { toneType: 'symbol', type: 'array' })[0];
     };
 
-    const [selectedResponse, setSelectedResponse] = useState(null); // 添加选中状态
+    // const [selectedResponse, setSelectedResponse] = useState(null); // 添加选中状态
 
     // 添加选择响应的处理函数
     const handleSelectResponse = (provider) => {
@@ -392,7 +566,7 @@ export const Generation = () => {
                         <>
                             <div className="input-box" style={{ position: 'relative' }}>
                                 {/* 在输入框内显示加载动画 */}
-                                {(loading || testLoading) && 
+                                {(loading) && 
                                     <div style={{ 
                                         position: 'absolute', 
                                         top: 0, 
@@ -521,5 +695,3 @@ export const Generation = () => {
         </div>
     );
 };
-
-export default Generation;
