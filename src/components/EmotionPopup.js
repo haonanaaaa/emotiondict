@@ -11,6 +11,9 @@ const EmotionPopup = ({ emotion, onClose }) => {
     // 添加调试代码
     console.log('弹窗数据:', emotion);
     
+    // 处理拼音显示，将逗号替换为空格
+    const formattedPinyin = emotion.pinyin ? emotion.pinyin.replace(/,/g, ' ') : '';
+    
     return (
         <AnimatePresence>
             <motion.div 
@@ -36,7 +39,7 @@ const EmotionPopup = ({ emotion, onClose }) => {
                     <div className="popup-container">
                         <div className="popup-left">
                             <div className="emotion-header">
-                                <div className="emotion-pinyin">{emotion.pinyin}</div>
+                                <div className="emotion-pinyin">{formattedPinyin}</div>
                                 <div className="emotion-name">{emotion.name}</div>
                             </div>
                             
